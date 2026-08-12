@@ -51,6 +51,7 @@ pub(super) fn render_filter_bar<'a>(state: &AppState) -> Line<'a> {
             Style::default().fg(theme.filter_inactive)
         };
         spans.push(Span::styled(icon.to_string(), icon_style));
+        spans.push(Span::raw(" "));
 
         let count_str = format!("{count}");
         let count_style = if count == 0 {
