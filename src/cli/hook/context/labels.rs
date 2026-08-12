@@ -53,7 +53,16 @@ pub(in crate::cli::hook) fn repo_label_from_path(path: &str) -> Option<String> {
     if trimmed.is_empty() {
         return None;
     }
-    let label = trimmed.rsplit('/').next().unwrap_or(trimmed).trim();
+    let parts: Vec<&str> = trimmed.split('/').filter(|s| !s.is_empty()).collect();
+    let label = if parts.len() >= 2 {
+        format!("{}/{}", parts[parts.len() - 2], parts[parts.len() - 1])
+    } else if parts.len() == 1 {
+        parts[0].to_string()
+    } else {
+        trimmed.to_string()
+    };
+    
+    let label = label.trim();
     if label.is_empty() {
         None
     } else {
@@ -70,9 +79,9 @@ mod tests {
     fn repo_label_from_path_strips_trailing_slash() {
         assert_eq!(
             repo_label_from_path("/home/user/repo/"),
-            Some("repo".into())
+            Some("user/repo".into())
         );
-        assert_eq!(repo_label_from_path("/home/user/repo"), Some("repo".into()));
+        assert_eq!(repo_label_from_path("/home/user/repo"), Some("user/repo".into()));
     }
 
     #[test]
@@ -97,7 +106,7 @@ mod tests {
             worktree: &wt,
             session_id: &session_id,
         };
-        assert_eq!(repo_label_from_ctx(&ctx), Some("repo".into()));
+        assert_eq!(repo_label_from_ctx(&ctx), Some("user/repo".into()));
     }
 
     #[test]
@@ -107,7 +116,7 @@ mod tests {
         tmux::test_mock::set(pane, tmux::PANE_CWD, "/home/user/app");
         tmux::test_mock::set(pane, tmux::PANE_WORKTREE_NAME, "wt-name");
 
-        assert_eq!(repo_label_from_pane(pane), Some("app".into()));
+        assert_eq!(repo_label_from_pane(pane), Some("user/app".into()));
 
         tmux::test_mock::set(pane, tmux::PANE_CWD, "");
         assert_eq!(repo_label_from_pane(pane), Some("wt-name".into()));

@@ -118,11 +118,16 @@ pub fn group_panes_by_repo(sessions: &[crate::tmux::SessionInfo]) -> Vec<RepoGro
                     None => pane.path.clone(),
                 };
 
-                let display_name = group_key
-                    .rsplit('/')
-                    .next()
-                    .unwrap_or(&group_key)
-                    .to_string();
+                let display_name = {
+                    let parts: Vec<&str> = group_key.split('/').filter(|s| !s.is_empty()).collect();
+                    if parts.len() >= 2 {
+                        format!("{}/{}", parts[parts.len() - 2], parts[parts.len() - 1])
+                    } else if parts.len() == 1 {
+                        parts[0].to_string()
+                    } else {
+                        group_key.clone()
+                    }
+                };
 
                 let has_focus = window.window_active && pane.pane_active;
 
@@ -280,7 +285,7 @@ mod tests {
         let groups = group_panes_by_repo(&sessions);
 
         assert_eq!(groups.len(), 1);
-        assert_eq!(groups[0].name, "no-git-here");
+        assert_eq!(groups[0].name, "tmp/no-git-here");
     }
 
     #[test]
@@ -292,13 +297,13 @@ mod tests {
         let groups = group_panes_by_repo(&sessions);
 
         assert_eq!(groups.len(), 1);
-        let expected_name = std::path::Path::new(manifest_dir)
-            .file_name()
-            .unwrap()
-            .to_string_lossy();
+        let path = std::path::Path::new(manifest_dir);
+        let parent = path.parent().unwrap().file_name().unwrap().to_string_lossy();
+        let name = path.file_name().unwrap().to_string_lossy();
+        let expected_name = format!("{}/{}", parent, name);
         assert_eq!(
             groups[0].name, expected_name,
-            "display name should be repo basename"
+            "display name should be org/repo"
         );
     }
 
@@ -417,9 +422,9 @@ mod tests {
         let groups = group_panes_by_repo(&sessions);
 
         assert_eq!(groups.len(), 3);
-        assert_eq!(groups[0].name, "Aaa");
-        assert_eq!(groups[1].name, "mmm");
-        assert_eq!(groups[2].name, "zzz");
+        assert_eq!(groups[0].name, "tmp/Aaa");
+        assert_eq!(groups[1].name, "tmp/mmm");
+        assert_eq!(groups[2].name, "tmp/zzz");
         assert_eq!(groups[2].panes.len(), 2, "zzz should have 2 panes");
     }
 }
