@@ -1,4 +1,4 @@
-use crate::tmux::{CLAUDE_AGENT, CODEX_AGENT};
+use crate::tmux::{ANTIGRAVITY_AGENT, CLAUDE_AGENT, CODEX_AGENT};
 
 /// Build the ready-to-paste LLM prompt for the given agent name.
 ///
@@ -39,6 +39,14 @@ pub(crate) fn prompt_for_agent(agent: &str) -> Option<String> {
                  Add these hooks to ~/.codex/hooks.json. If hooks already \
                  exist, merge them without making destructive changes. Restart \
                  Codex after changing config.toml so the feature flag takes effect."
+            ))
+        }
+        ANTIGRAVITY_AGENT => {
+            let exe_path =
+                crate::cli::setup::shell_quote(&std::env::current_exe().ok()?.to_string_lossy());
+            Some(format!(
+                "Run {exe_path} setup antigravity and paste the snippet into ~/.gemini/config/hooks.json. \
+                 If hooks already exist, merge them."
             ))
         }
         _ => None,
@@ -246,6 +254,13 @@ mod tests {
     fn prompt_for_agent_none_for_unknown_agent() {
         assert_eq!(prompt_for_agent("gemini"), None);
         assert_eq!(prompt_for_agent(""), None);
+    }
+
+    #[test]
+    fn prompt_for_agent_antigravity_contains_setup_instruction() {
+        let prompt = prompt_for_agent("antigravity").unwrap();
+        assert!(prompt.contains("setup antigravity"));
+        assert!(prompt.contains("~/.gemini/config/hooks.json"));
     }
 
     #[test]

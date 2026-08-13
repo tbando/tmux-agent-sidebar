@@ -34,7 +34,18 @@ pub(crate) fn cmd_hook(args: &[String]) -> i32 {
         return 0;
     };
 
-    handle_event(&pane, agent_name, event)
+    let exit_code = handle_event(&pane, agent_name, event);
+
+    // Antigravity requires a valid JSON output on stdout for all its hooks.
+    if agent_name == "antigravity" && exit_code == 0 {
+        if event_name == "activity-log" {
+            println!("{{\"decision\": \"allow\"}}");
+        } else {
+            println!("{{}}");
+        }
+    }
+
+    exit_code
 }
 
 // ─── event handler ──────────────────────────────────────────────────────────

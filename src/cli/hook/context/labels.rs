@@ -61,7 +61,7 @@ pub(in crate::cli::hook) fn repo_label_from_path(path: &str) -> Option<String> {
     } else {
         trimmed.to_string()
     };
-    
+
     let label = label.trim();
     if label.is_empty() {
         None
@@ -81,7 +81,10 @@ mod tests {
             repo_label_from_path("/home/user/repo/"),
             Some("user/repo".into())
         );
-        assert_eq!(repo_label_from_path("/home/user/repo"), Some("user/repo".into()));
+        assert_eq!(
+            repo_label_from_path("/home/user/repo"),
+            Some("user/repo".into())
+        );
     }
 
     #[test]

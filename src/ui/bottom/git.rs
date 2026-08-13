@@ -283,7 +283,7 @@ mod tests {
         state.git.pr_number = Some("7".into());
         insta::assert_snapshot!(render(&mut state, 40, 4), @"
 
-        main                             ↑2↓1 #7
+        main                          ↑ 2 ↓ 1 #7
         ────────────────────────────────────────
                    Working tree clean
         ");
@@ -296,7 +296,7 @@ mod tests {
         state.git.ahead_behind = Some((2, 1));
         insta::assert_snapshot!(render(&mut state, 40, 4), @"
 
-        main                                ↑2↓1
+        main                             ↑ 2 ↓ 1
         ────────────────────────────────────────
                    Working tree clean
         ");
@@ -310,7 +310,7 @@ mod tests {
         state.git.pr_number = Some("7".into());
         insta::assert_snapshot!(render(&mut state, 32, 4), @"
 
-        feature/sidebar/really…  ↑2↓1 #7
+        feature/sidebar/rea…  ↑ 2 ↓ 1 #7
         ────────────────────────────────
                Working tree clean
         ");

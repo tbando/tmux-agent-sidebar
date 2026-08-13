@@ -104,6 +104,7 @@ pub const SIDEBAR_COLOR_FILTER_INACTIVE: &str = "@sidebar_color_filter_inactive"
 pub const SIDEBAR_COLOR_AGENT_CLAUDE: &str = "@sidebar_color_agent_claude";
 pub const SIDEBAR_COLOR_AGENT_CODEX: &str = "@sidebar_color_agent_codex";
 pub const SIDEBAR_COLOR_AGENT_OPENCODE: &str = "@sidebar_color_agent_opencode";
+pub const SIDEBAR_COLOR_AGENT_ANTIGRAVITY: &str = "@sidebar_color_agent_antigravity";
 pub const SIDEBAR_COLOR_PET_BODY: &str = "@sidebar_color_pet_body";
 pub const SIDEBAR_COLOR_PET_EYE: &str = "@sidebar_color_pet_eye";
 pub const SIDEBAR_COLOR_TEXT_ACTIVE: &str = "@sidebar_color_text_active";
@@ -132,6 +133,10 @@ pub const SIDEBAR_ICON_WAITING: &str = "@sidebar_icon_waiting";
 pub const SIDEBAR_ICON_IDLE: &str = "@sidebar_icon_idle";
 pub const SIDEBAR_ICON_ERROR: &str = "@sidebar_icon_error";
 pub const SIDEBAR_ICON_UNKNOWN: &str = "@sidebar_icon_unknown";
+pub const SIDEBAR_ICON_GIT_AHEAD: &str = "@sidebar_icon_git_ahead";
+pub const SIDEBAR_ICON_GIT_BEHIND: &str = "@sidebar_icon_git_behind";
+pub const SIDEBAR_ICON_GIT_DIVERGED: &str = "@sidebar_icon_git_diverged";
+pub const SIDEBAR_ICON_GIT_SYNCED: &str = "@sidebar_icon_git_synced";
 
 pub fn get_option(name: &str) -> Option<String> {
     run_tmux(&["show", "-gv", name])

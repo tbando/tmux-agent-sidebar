@@ -12,6 +12,10 @@ pub struct StatusIcons {
     idle: String,
     error: String,
     unknown: String,
+    pub git_ahead: String,
+    pub git_behind: String,
+    pub git_diverged: String,
+    pub git_synced: String,
 }
 
 impl Default for StatusIcons {
@@ -24,6 +28,10 @@ impl Default for StatusIcons {
             idle: "○".into(),
             error: "✕".into(),
             unknown: "·".into(),
+            git_ahead: "↑".into(),
+            git_behind: "↓".into(),
+            git_diverged: "↕".into(),
+            git_synced: "✓".into(),
         }
     }
 }
@@ -54,6 +62,12 @@ impl StatusIcons {
         icons.idle = read(tmux::SIDEBAR_ICON_IDLE, &icons.idle);
         icons.error = read(tmux::SIDEBAR_ICON_ERROR, &icons.error);
         icons.unknown = read(tmux::SIDEBAR_ICON_UNKNOWN, &icons.unknown);
+
+        icons.git_ahead = read(tmux::SIDEBAR_ICON_GIT_AHEAD, &icons.git_ahead);
+        icons.git_behind = read(tmux::SIDEBAR_ICON_GIT_BEHIND, &icons.git_behind);
+        icons.git_diverged = read(tmux::SIDEBAR_ICON_GIT_DIVERGED, &icons.git_diverged);
+        icons.git_synced = read(tmux::SIDEBAR_ICON_GIT_SYNCED, &icons.git_synced);
+
         icons
     }
 

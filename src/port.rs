@@ -151,6 +151,13 @@ pub(crate) fn scan_session_process_snapshot(
                     command_by_pane.insert(pane.pane_id.clone(), command);
                 }
                 for pid in descendant_set {
+                    // Do not show internal IPC or debug ports opened by the agent executable itself.
+                    // Only show ports opened by tools/commands spawned by the agent.
+                    if let Some(info) = process_snapshot.info_by_pid.get(&pid)
+                        && crate::process::process_matches_agent(info, pane.agent.as_str())
+                    {
+                        continue;
+                    }
                     pid_to_panes
                         .entry(pid)
                         .or_default()

@@ -105,6 +105,10 @@ Any Unicode glyph works. Make sure the glyphs render in your terminal font.
 | `@sidebar_icon_idle`    | `○`     | Idle status icon             |
 | `@sidebar_icon_error`   | `✕`     | Error status icon            |
 | `@sidebar_icon_unknown` | `·`     | Unknown status icon          |
+| `@sidebar_icon_git_ahead` | `↑`     | Git ahead icon          |
+| `@sidebar_icon_git_behind` | `↓`     | Git behind icon          |
+| `@sidebar_icon_git_diverged` | `↕`     | Git diverged icon          |
+| `@sidebar_icon_git_synced` | `✓`     | Git synced icon          |
 
 ## Example config
 

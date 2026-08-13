@@ -121,14 +121,24 @@ pub(crate) fn command_basename(command: &str) -> &str {
 }
 
 pub(crate) fn process_matches_agent(info: &ProcessInfo, agent_name: &str) -> bool {
-    if command_basename(&info.comm) == agent_name {
+    let comm_base = command_basename(&info.comm);
+    if comm_base == agent_name
+        || (agent_name == "antigravity" && (comm_base == "agy" || comm_base == "antigravity"))
+    {
         return true;
     }
 
-    let Some(command) = info.args.split_whitespace().next() else {
-        return false;
-    };
-    command_basename(command.trim_matches('"')) == agent_name
+    // Check all words in args in case it's run via a wrapper (e.g. `python3 /path/to/agy` or `python3 -m antigravity`)
+    for arg in info.args.split_whitespace() {
+        let arg_base = command_basename(arg.trim_matches('"'));
+        if arg_base == agent_name
+            || (agent_name == "antigravity" && (arg_base == "agy" || arg_base == "antigravity"))
+        {
+            return true;
+        }
+    }
+
+    false
 }
 
 #[cfg(test)]

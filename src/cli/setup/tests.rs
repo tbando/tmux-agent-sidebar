@@ -457,7 +457,7 @@ fn full_output_has_expected_top_level_keys() {
     let agents = v.get("agents").and_then(Value::as_object).unwrap();
     let mut keys: Vec<&str> = agents.keys().map(String::as_str).collect();
     keys.sort();
-    assert_eq!(keys, vec!["claude", "codex"]);
+    assert_eq!(keys, vec!["antigravity", "claude", "codex"]);
 }
 
 #[test]
@@ -572,7 +572,7 @@ fn full_output_snapshot() {
     // Version-independent snapshot: substitute the placeholder at test
     // time so a version bump in Cargo.toml does not break this test.
     // When adapter tables legitimately change, temporarily add a
-    // `println!` to inspect the new output and update the literal below.
+    // `println!` to inspect the new output and update the literal below
     let expected = EXPECTED_FULL_OUTPUT.replace("__VERSION__", crate::VERSION);
     assert_eq!(
         actual, expected,
@@ -583,6 +583,51 @@ fn full_output_snapshot() {
 
 const EXPECTED_FULL_OUTPUT: &str = r#"{
   "agents": {
+    "antigravity": {
+      "config_path": "~/.gemini/config/hooks.json",
+      "hooks": [
+        {
+          "command": "bash /fake/hook.sh antigravity user-prompt-submit",
+          "event": "user-prompt-submit",
+          "matcher": null,
+          "trigger": "PreInvocation"
+        },
+        {
+          "command": "bash /fake/hook.sh antigravity activity-log",
+          "event": "activity-log",
+          "matcher": null,
+          "trigger": "PreToolUse"
+        },
+        {
+          "command": "bash /fake/hook.sh antigravity stop",
+          "event": "stop",
+          "matcher": null,
+          "trigger": "Stop"
+        }
+      ],
+      "snippet": {
+        "hooks": {
+          "PreInvocation": [
+            {
+              "command": "bash /fake/hook.sh antigravity user-prompt-submit",
+              "type": "command"
+            }
+          ],
+          "PreToolUse": [
+            {
+              "command": "bash /fake/hook.sh antigravity activity-log",
+              "type": "command"
+            }
+          ],
+          "Stop": [
+            {
+              "command": "bash /fake/hook.sh antigravity stop",
+              "type": "command"
+            }
+          ]
+        }
+      }
+    },
     "claude": {
       "config_path": "~/.claude/settings.json",
       "hooks": [
@@ -915,7 +960,7 @@ const EXPECTED_FULL_OUTPUT: &str = r#"{
 #[test]
 fn full_output_normalized_command_matches_snippet_command() {
     let full = build_setup_output(FAKE_HOOK);
-    for agent in ["claude", "codex"] {
+    for agent in ["antigravity", "claude", "codex"] {
         let hooks = full
             .pointer(&format!("/agents/{}/hooks", agent))
             .and_then(Value::as_array)
@@ -928,10 +973,14 @@ fn full_output_normalized_command_matches_snippet_command() {
                 .and_then(Value::as_array)
                 .unwrap_or_else(|| panic!("snippet missing trigger {} for {}", trigger, agent));
             let found = group.iter().any(|slot: &Value| {
-                slot.pointer("/hooks/0/command")
-                    .and_then(Value::as_str)
-                    .map(|c| c == command)
-                    .unwrap_or(false)
+                if let Some(cmd) = slot.get("command").and_then(Value::as_str) {
+                    cmd == command
+                } else {
+                    slot.pointer("/hooks/0/command")
+                        .and_then(Value::as_str)
+                        .map(|c| c == command)
+                        .unwrap_or(false)
+                }
             });
             assert!(
                 found,

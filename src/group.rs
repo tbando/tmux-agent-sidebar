@@ -147,7 +147,7 @@ pub fn group_panes_by_repo(sessions: &[crate::tmux::SessionInfo]) -> Vec<RepoGro
     }
 
     let mut result: Vec<RepoGroup> = groups.into_values().collect();
-    result.sort_by(|a, b| a.name.to_lowercase().cmp(&b.name.to_lowercase()));
+    result.sort_by_key(|a| a.name.to_lowercase());
     result
 }
 
@@ -298,7 +298,12 @@ mod tests {
 
         assert_eq!(groups.len(), 1);
         let path = std::path::Path::new(manifest_dir);
-        let parent = path.parent().unwrap().file_name().unwrap().to_string_lossy();
+        let parent = path
+            .parent()
+            .unwrap()
+            .file_name()
+            .unwrap()
+            .to_string_lossy();
         let name = path.file_name().unwrap().to_string_lossy();
         let expected_name = format!("{}/{}", parent, name);
         assert_eq!(

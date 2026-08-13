@@ -6,6 +6,7 @@
 use std::path::PathBuf;
 
 use crate::adapter::HookRegistration;
+use crate::adapter::antigravity::AntigravityAdapter;
 use crate::adapter::claude::ClaudeAdapter;
 use crate::adapter::codex::CodexAdapter;
 
@@ -65,19 +66,30 @@ pub(crate) fn build_agent_snippet(agent: &str, hook_script: &str) -> Option<serd
     let table: &[HookRegistration] = match agent {
         "claude" => ClaudeAdapter::HOOK_REGISTRATIONS,
         "codex" => CodexAdapter::HOOK_REGISTRATIONS,
+        "antigravity" => AntigravityAdapter::HOOK_REGISTRATIONS,
         _ => return None,
     };
 
     let mut hooks = serde_json::Map::new();
     for reg in table {
-        let matcher = reg.matcher.unwrap_or("");
         let command = format_hook_command(hook_script, agent, reg.kind.external_name());
-        let entry = serde_json::json!({
-            "matcher": matcher,
-            "hooks": [
-                { "type": "command", "command": command }
-            ],
-        });
+
+        let entry = if agent == "antigravity" && reg.matcher.is_none() {
+            // Antigravity requires a flat structure for events without a matcher (PreInvocation, Stop).
+            serde_json::json!({
+                "type": "command",
+                "command": command
+            })
+        } else {
+            let matcher = reg.matcher.unwrap_or("");
+            serde_json::json!({
+                "matcher": matcher,
+                "hooks": [
+                    { "type": "command", "command": command }
+                ],
+            })
+        };
+
         let arr = hooks
             .entry(reg.trigger.to_string())
             .or_insert_with(|| serde_json::Value::Array(Vec::new()))
@@ -114,24 +126,38 @@ fn collect_hook_specs(config: &serde_json::Value) -> Vec<HookSpec> {
             continue;
         };
         for entry in entries {
-            let matcher = normalize_matcher(entry.get("matcher"));
-            let Some(actions) = entry.get("hooks").and_then(serde_json::Value::as_array) else {
-                continue;
-            };
-            for action in actions {
-                if action.get("type").and_then(serde_json::Value::as_str) != Some("command") {
-                    continue;
-                }
-                let command = action
+            // Check if it's a flat structure (Antigravity) or grouped structure (Codex/Claude)
+            if entry.get("type").and_then(serde_json::Value::as_str) == Some("command") {
+                let command = entry
                     .get("command")
                     .and_then(serde_json::Value::as_str)
                     .unwrap_or("")
                     .to_string();
                 specs.push(HookSpec {
                     trigger: trigger.clone(),
-                    matcher: matcher.clone(),
+                    matcher: String::new(),
                     command,
                 });
+            } else {
+                let matcher = normalize_matcher(entry.get("matcher"));
+                let Some(actions) = entry.get("hooks").and_then(serde_json::Value::as_array) else {
+                    continue;
+                };
+                for action in actions {
+                    if action.get("type").and_then(serde_json::Value::as_str) != Some("command") {
+                        continue;
+                    }
+                    let command = action
+                        .get("command")
+                        .and_then(serde_json::Value::as_str)
+                        .unwrap_or("")
+                        .to_string();
+                    specs.push(HookSpec {
+                        trigger: trigger.clone(),
+                        matcher: matcher.clone(),
+                        command,
+                    });
+                }
             }
         }
     }
@@ -283,6 +309,12 @@ pub(crate) fn build_setup_output(hook_script: &str) -> serde_json::Value {
         CodexAdapter::HOOK_REGISTRATIONS,
         hook_script,
     );
+    let antigravity = build_agent_entry(
+        "antigravity",
+        "~/.gemini/config/hooks.json",
+        AntigravityAdapter::HOOK_REGISTRATIONS,
+        hook_script,
+    );
 
     serde_json::json!({
         "version": crate::VERSION,
@@ -290,6 +322,7 @@ pub(crate) fn build_setup_output(hook_script: &str) -> serde_json::Value {
         "agents": {
             "claude": claude,
             "codex": codex,
+            "antigravity": antigravity,
         },
     })
 }
@@ -401,6 +434,7 @@ pub(crate) fn config_path_for_agent(agent: &str) -> Option<PathBuf> {
     match agent {
         "claude" => Some(home.join(".claude/settings.json")),
         "codex" => Some(home.join(".codex/hooks.json")),
+        "antigravity" => Some(home.join(".gemini/config/hooks.json")),
         _ => None,
     }
 }
@@ -431,14 +465,14 @@ fn run_setup(args: &[String], hook_script: &str) -> (i32, Option<serde_json::Val
             Some(snippet) => (0, Some(snippet)),
             None => {
                 eprintln!(
-                    "error: unknown agent '{}' (expected 'claude' or 'codex')",
+                    "error: unknown agent '{}' (expected 'claude', 'codex', or 'antigravity')",
                     args[0]
                 );
                 (2, None)
             }
         },
         _ => {
-            eprintln!("usage: tmux-agent-sidebar setup [claude|codex]");
+            eprintln!("usage: tmux-agent-sidebar setup [claude|codex|antigravity]");
             (2, None)
         }
     }

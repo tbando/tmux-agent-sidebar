@@ -163,12 +163,12 @@ fn build_session_hierarchy(
         // Deduplicate panes shared across grouped sessions:
         // same pane_pid may appear in multiple sessions, keep only
         // the first occurrence. pane_pid is at index 13 in pane_fields.
-        if let Some(pid_str) = pane_fields.get(pane_line_field::PANE_PID) {
-            if let Ok(pid) = pid_str.parse::<u32>() {
-                if pid != 0 && !seen_pids.insert(pid) {
-                    continue;
-                }
-            }
+        if let Some(pid_str) = pane_fields.get(pane_line_field::PANE_PID)
+            && let Ok(pid) = pid_str.parse::<u32>()
+            && pid != 0
+            && !seen_pids.insert(pid)
+        {
+            continue;
         }
 
         let sessions_entry = sessions_map.entry(session_name.to_string()).or_default();
@@ -263,8 +263,9 @@ fn parse_pane_fields_with_processes(
         return None;
     }
 
-    let agent = AgentType::from_label(&parts[pane_line_field::AGENT])?;
     let current_command = parts[pane_line_field::PANE_CURRENT_COMMAND].as_str();
+    let agent = AgentType::from_label(&parts[pane_line_field::AGENT])
+        .or_else(|| AgentType::from_command(current_command))?;
     let pane_pid: Option<u32> = parts[pane_line_field::PANE_PID].parse().ok();
 
     // Codex / OpenCode panes can leave stale tmux metadata behind after the
