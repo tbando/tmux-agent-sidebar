@@ -2,23 +2,47 @@ use std::collections::HashSet;
 
 use crate::tmux;
 
-pub(crate) fn cmd_toggle(args: &[String]) -> i32 {
+#[derive(Debug, PartialEq, Eq)]
+struct ToggleArgs<'a> {
+    create_only: bool,
+    close_only: bool,
+    window_id: Option<&'a str>,
+    pane_path: &'a str,
+}
+
+fn parse_toggle_args(args: &[String]) -> ToggleArgs<'_> {
     let mut create_only = false;
+    let mut close_only = false;
     let mut positional = Vec::new();
 
     for arg in args {
         if arg == "--create-only" {
             create_only = true;
+        } else if arg == "--close-only" {
+            close_only = true;
         } else {
             positional.push(arg.as_str());
         }
     }
 
-    let window_id = match positional.first() {
-        Some(id) => *id,
+    let window_id = positional.first().copied();
+    let pane_path = positional.get(1).copied().unwrap_or("~");
+
+    ToggleArgs {
+        create_only,
+        close_only,
+        window_id,
+        pane_path,
+    }
+}
+
+pub(crate) fn cmd_toggle(args: &[String]) -> i32 {
+    let parsed = parse_toggle_args(args);
+    let window_id = match parsed.window_id {
+        Some(id) => id,
         None => return 0,
     };
-    let pane_path = positional.get(1).copied().unwrap_or("~");
+    let pane_path = parsed.pane_path;
 
     // Check sidebar width setting
     let sidebar_width_setting = {
@@ -68,10 +92,14 @@ pub(crate) fn cmd_toggle(args: &[String]) -> i32 {
     });
 
     if let Some(sidebar_pane) = existing_sidebar {
-        if create_only {
+        if parsed.create_only {
             return 0;
         }
         let _ = tmux::run_tmux(&["kill-pane", "-t", &sidebar_pane]);
+        return 0;
+    }
+
+    if parsed.close_only {
         return 0;
     }
 
@@ -349,6 +377,46 @@ fn pane_id_role_format() -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn parse_toggle_args_parses_flags_and_positional_args() {
+        let args = vec!["@1".to_string(), "/path/to/project".to_string()];
+        assert_eq!(
+            parse_toggle_args(&args),
+            ToggleArgs {
+                create_only: false,
+                close_only: false,
+                window_id: Some("@1"),
+                pane_path: "/path/to/project",
+            }
+        );
+
+        let args = vec!["--create-only".to_string(), "@1".to_string()];
+        assert_eq!(
+            parse_toggle_args(&args),
+            ToggleArgs {
+                create_only: true,
+                close_only: false,
+                window_id: Some("@1"),
+                pane_path: "~",
+            }
+        );
+
+        let args = vec![
+            "--close-only".to_string(),
+            "@2".to_string(),
+            "/home/user".to_string(),
+        ];
+        assert_eq!(
+            parse_toggle_args(&args),
+            ToggleArgs {
+                create_only: false,
+                close_only: true,
+                window_id: Some("@2"),
+                pane_path: "/home/user",
+            }
+        );
+    }
 
     #[test]
     fn any_sidebar_pane_detects_sidebar_anywhere() {
