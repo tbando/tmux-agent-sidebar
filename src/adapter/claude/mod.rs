@@ -131,6 +131,9 @@ impl ClaudeAdapter {
 
 impl EventAdapter for ClaudeAdapter {
     fn parse(&self, event_name: &str, input: &Value) -> Option<AgentEvent> {
+        let model = optional_str(input, "model");
+        let effort = optional_str(input, "effort");
+
         match event_name {
             "session-start" => Some(AgentEvent::SessionStart {
                 agent: CLAUDE_AGENT.into(),
@@ -140,6 +143,8 @@ impl EventAdapter for ClaudeAdapter {
                 worktree: parse_worktree(input),
                 agent_id: optional_str(input, "agent_id"),
                 session_id: optional_str(input, "session_id"),
+                model,
+                effort,
             }),
             "session-end" => Some(AgentEvent::SessionEnd {
                 end_reason: json_str(input, "end_reason").into(),
@@ -152,6 +157,8 @@ impl EventAdapter for ClaudeAdapter {
                 worktree: parse_worktree(input),
                 agent_id: optional_str(input, "agent_id"),
                 session_id: optional_str(input, "session_id"),
+                model,
+                effort,
             }),
             "notification" => {
                 let wait_reason = json_str(input, "notification_type");
@@ -165,6 +172,8 @@ impl EventAdapter for ClaudeAdapter {
                     worktree: parse_worktree(input),
                     agent_id: optional_str(input, "agent_id"),
                     session_id: optional_str(input, "session_id"),
+                    model,
+                    effort,
                 })
             }
             "stop" => Some(AgentEvent::Stop {
@@ -176,6 +185,8 @@ impl EventAdapter for ClaudeAdapter {
                 worktree: parse_worktree(input),
                 agent_id: optional_str(input, "agent_id"),
                 session_id: optional_str(input, "session_id"),
+                model,
+                effort,
             }),
             "stop-failure" => {
                 // Upstream fields: error_type (category), error_message (detail)
@@ -201,6 +212,8 @@ impl EventAdapter for ClaudeAdapter {
                     worktree: parse_worktree(input),
                     agent_id: optional_str(input, "agent_id"),
                     session_id: optional_str(input, "session_id"),
+                    model,
+                    effort,
                 })
             }
             "permission-denied" => Some(AgentEvent::PermissionDenied {
@@ -210,6 +223,8 @@ impl EventAdapter for ClaudeAdapter {
                 worktree: parse_worktree(input),
                 agent_id: optional_str(input, "agent_id"),
                 session_id: optional_str(input, "session_id"),
+                model,
+                effort,
             }),
             "cwd-changed" => Some(AgentEvent::CwdChanged {
                 cwd: json_str(input, "cwd").into(),

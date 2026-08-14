@@ -134,6 +134,8 @@ mod tests {
             session_name: String::new(),
             sidebar_spawned: false,
             bg_shell_cmd: None,
+            model: None,
+            effort: None,
         }
     }
 
@@ -200,6 +202,140 @@ mod tests {
             status.contains(" codex defer"),
             "defer permission mode should render its badge, got: {status}"
         );
+    }
+
+    #[test]
+    fn render_pane_lines_shows_model_and_effort() {
+        let theme = ColorTheme::default();
+        let mut p = pane(PermissionMode::Auto, PaneStatus::Running, "");
+        p.agent = AgentType::Antigravity;
+        p.model = Some("gemini 3.7 flash".into());
+        p.effort = Some("medium".into());
+        let lines = render_pane_lines_with_ports(
+            &p,
+            &PaneGitInfo::default(),
+            None,
+            None,
+            false,
+            false,
+            50,
+            &StatusIcons::default(),
+            &theme,
+            0,
+            0,
+        );
+
+        let status = line_text(&lines[0]);
+        assert!(
+            status.contains("antigravity/gemini3.7flash/medium auto"),
+            "should format as antigravity/gemini3.7flash/medium auto, got: {status}"
+        );
+
+        // Verify span styles
+        let line = &lines[0];
+        let slash_span = line.spans.iter().find(|s| s.content == "/").unwrap();
+        assert_eq!(slash_span.style.fg, Some(Color::Indexed(7)));
+
+        let model_span = line
+            .spans
+            .iter()
+            .find(|s| s.content == "gemini3.7flash")
+            .unwrap();
+        assert_eq!(model_span.style.fg, Some(Color::Indexed(15)));
+
+        let effort_span = line.spans.iter().find(|s| s.content == "medium").unwrap();
+        assert_eq!(effort_span.style.fg, Some(Color::Indexed(3)));
+    }
+
+    #[test]
+    fn render_pane_lines_splits_effort_suffix_from_model_name() {
+        let theme = ColorTheme::default();
+        let mut p = pane(PermissionMode::Auto, PaneStatus::Running, "");
+        p.agent = AgentType::Antigravity;
+        p.model = Some("gemini-3.7-flash-medium".into());
+        p.effort = None;
+        let lines = render_pane_lines_with_ports(
+            &p,
+            &PaneGitInfo::default(),
+            None,
+            None,
+            false,
+            false,
+            50,
+            &StatusIcons::default(),
+            &theme,
+            0,
+            0,
+        );
+
+        let status = line_text(&lines[0]);
+        assert!(
+            status.contains("antigravity/gemini-3.7-flash/medium auto"),
+            "should format as antigravity/gemini-3.7-flash/medium auto, got: {status}"
+        );
+
+        let line = &lines[0];
+        let model_span = line
+            .spans
+            .iter()
+            .find(|s| s.content == "gemini-3.7-flash")
+            .unwrap();
+        assert_eq!(model_span.style.fg, Some(Color::Indexed(15)));
+
+        let effort_span = line.spans.iter().find(|s| s.content == "medium").unwrap();
+        assert_eq!(effort_span.style.fg, Some(Color::Indexed(3)));
+    }
+
+    #[test]
+    fn render_pane_lines_effort_colors() {
+        let theme = ColorTheme::default();
+        // low -> Green (ANSI 2)
+        let mut p_low = pane(PermissionMode::Default, PaneStatus::Idle, "");
+        p_low.model = Some("claude-3-7-sonnet".into());
+        p_low.effort = Some("low".into());
+        let lines_low = render_pane_lines_with_ports(
+            &p_low,
+            &PaneGitInfo::default(),
+            None,
+            None,
+            false,
+            false,
+            50,
+            &StatusIcons::default(),
+            &theme,
+            0,
+            0,
+        );
+        let low_span = lines_low[0]
+            .spans
+            .iter()
+            .find(|s| s.content == "low")
+            .unwrap();
+        assert_eq!(low_span.style.fg, Some(Color::Indexed(2)));
+
+        // high -> Red (ANSI 1)
+        let mut p_high = pane(PermissionMode::Default, PaneStatus::Idle, "");
+        p_high.model = Some("o3-mini".into());
+        p_high.effort = Some("high".into());
+        let lines_high = render_pane_lines_with_ports(
+            &p_high,
+            &PaneGitInfo::default(),
+            None,
+            None,
+            false,
+            false,
+            50,
+            &StatusIcons::default(),
+            &theme,
+            0,
+            0,
+        );
+        let high_span = lines_high[0]
+            .spans
+            .iter()
+            .find(|s| s.content == "high")
+            .unwrap();
+        assert_eq!(high_span.style.fg, Some(Color::Indexed(1)));
     }
 
     #[test]
@@ -373,24 +509,37 @@ mod tests {
     #[test]
     fn running_icon_for_all_statuses() {
         let icons = StatusIcons::default();
-        assert_eq!(running_icon_for(&PaneStatus::Idle, 0, &icons), ("○", None));
+        let theme = ColorTheme::default();
         assert_eq!(
-            running_icon_for(&PaneStatus::Waiting, 0, &icons),
+            running_icon_for(&PaneStatus::Idle, 0, &icons, &theme),
+            ("○", None)
+        );
+        assert_eq!(
+            running_icon_for(&PaneStatus::Waiting, 0, &icons, &theme),
             ("◐", None)
         );
-        assert_eq!(running_icon_for(&PaneStatus::Error, 0, &icons), ("✕", None));
         assert_eq!(
-            running_icon_for(&PaneStatus::Unknown, 0, &icons),
+            running_icon_for(&PaneStatus::Error, 0, &icons, &theme),
+            ("✕", None)
+        );
+        assert_eq!(
+            running_icon_for(&PaneStatus::Unknown, 0, &icons, &theme),
             ("·", None)
         );
         assert_eq!(
-            running_icon_for(&PaneStatus::Background, 0, &icons),
+            running_icon_for(&PaneStatus::Background, 0, &icons, &theme),
             ("◎", None)
         );
 
-        let (icon, color) = running_icon_for(&PaneStatus::Running, 0, &icons);
+        let (icon, color) = running_icon_for(&PaneStatus::Running, 0, &icons, &theme);
         assert_eq!(icon, "●");
         assert_eq!(color, Some(Color::Indexed(82)));
+
+        let mut custom_theme = theme.clone();
+        custom_theme.running_spinner = Some(Color::Indexed(10));
+        let (icon, color) = running_icon_for(&PaneStatus::Running, 0, &icons, &custom_theme);
+        assert_eq!(icon, "●");
+        assert_eq!(color, Some(Color::Indexed(10)));
     }
 
     #[test]

@@ -250,6 +250,8 @@ mod tests {
             session_name: String::new(),
             sidebar_spawned: false,
             bg_shell_cmd: None,
+            model: None,
+            effort: None,
         };
         let pane2 = crate::tmux::PaneInfo {
             pane_id: "%3".into(),
@@ -271,6 +273,8 @@ mod tests {
             session_name: String::new(),
             sidebar_spawned: false,
             bg_shell_cmd: None,
+            model: None,
+            effort: None,
         };
         let mut state = make_state_with_groups(vec![crate::group::RepoGroup {
             name: "project".into(),

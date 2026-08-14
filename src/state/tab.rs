@@ -130,6 +130,9 @@ impl AppState {
             BottomTab::Activity => BottomTab::GitStatus,
             BottomTab::GitStatus => BottomTab::Activity,
         };
+        if let Some(ref cur_id) = self.focus_state.focused_pane_id.clone() {
+            self.pane_state_mut(cur_id).tab_pref = Some(self.bottom_tab.clone());
+        }
     }
 
     /// Handle mouse click on the bottom panel tab header.
@@ -144,6 +147,9 @@ impl AppState {
             self.bottom_tab = BottomTab::Activity;
         } else if (11..16).contains(&x) {
             self.bottom_tab = BottomTab::GitStatus;
+        }
+        if let Some(ref cur_id) = self.focus_state.focused_pane_id.clone() {
+            self.pane_state_mut(cur_id).tab_pref = Some(self.bottom_tab.clone());
         }
     }
 
@@ -188,6 +194,8 @@ mod tests {
             session_name: String::new(),
             sidebar_spawned: false,
             bg_shell_cmd: None,
+            model: None,
+            effort: None,
         }
     }
 

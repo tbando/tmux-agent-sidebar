@@ -120,13 +120,7 @@ mod tests {
     fn on_notification_meta_only_skips_status_and_attention() {
         let _guard = tmux::test_mock::install();
         let pane = "%NOTIF_META";
-        let ctx = AgentContext {
-            agent: "claude",
-            cwd: "/repo",
-            permission_mode: "default",
-            worktree: &None,
-            session_id: &None,
-        };
+        let ctx = AgentContext::test("claude", "/repo", "default");
         let notifications = desktop_notification::DesktopNotificationSettings {
             enabled: false,
             events: Default::default(),
@@ -153,13 +147,7 @@ mod tests {
     fn on_notification_sets_waiting_status_and_reason() {
         let _guard = tmux::test_mock::install();
         let pane = "%NOTIF_WAIT";
-        let ctx = AgentContext {
-            agent: "claude",
-            cwd: "/repo",
-            permission_mode: "default",
-            worktree: &None,
-            session_id: &None,
-        };
+        let ctx = AgentContext::test("claude", "/repo", "default");
         let notifications = desktop_notification::DesktopNotificationSettings {
             enabled: false,
             events: Default::default(),
@@ -190,13 +178,7 @@ mod tests {
         let _guard = tmux::test_mock::install();
         let pane = "%NOTIF_BG_PREEMPT";
         tmux::test_mock::set(pane, tmux::PANE_BG_CMD, "cargo test");
-        let ctx = AgentContext {
-            agent: "claude",
-            cwd: "/repo",
-            permission_mode: "default",
-            worktree: &None,
-            session_id: &None,
-        };
+        let ctx = AgentContext::test("claude", "/repo", "default");
         let notifications = desktop_notification::DesktopNotificationSettings {
             enabled: false,
             events: Default::default(),
@@ -219,13 +201,7 @@ mod tests {
         let _guard = tmux::test_mock::install();
         let pane = "%NOTIF_PERM_OVER_BG";
         tmux::test_mock::set(pane, tmux::PANE_BG_CMD, "cargo test");
-        let ctx = AgentContext {
-            agent: "claude",
-            cwd: "/repo",
-            permission_mode: "default",
-            worktree: &None,
-            session_id: &None,
-        };
+        let ctx = AgentContext::test("claude", "/repo", "default");
         let notifications = desktop_notification::DesktopNotificationSettings {
             enabled: false,
             events: Default::default(),
@@ -251,13 +227,7 @@ mod tests {
         let _guard = tmux::test_mock::install();
         let pane = "%NOTIF_PERM_PLAIN_OVER_BG";
         tmux::test_mock::set(pane, tmux::PANE_BG_CMD, "cargo test");
-        let ctx = AgentContext {
-            agent: "claude",
-            cwd: "/repo",
-            permission_mode: "default",
-            worktree: &None,
-            session_id: &None,
-        };
+        let ctx = AgentContext::test("claude", "/repo", "default");
         let notifications = desktop_notification::DesktopNotificationSettings {
             enabled: false,
             events: Default::default(),
@@ -279,13 +249,7 @@ mod tests {
     fn on_notification_soft_reason_without_bg_still_sets_waiting() {
         let _guard = tmux::test_mock::install();
         let pane = "%NOTIF_SOFT_NO_BG";
-        let ctx = AgentContext {
-            agent: "claude",
-            cwd: "/repo",
-            permission_mode: "default",
-            worktree: &None,
-            session_id: &None,
-        };
+        let ctx = AgentContext::test("claude", "/repo", "default");
         let notifications = desktop_notification::DesktopNotificationSettings {
             enabled: false,
             events: Default::default(),
@@ -314,13 +278,7 @@ mod tests {
         let pane = "%NOTIF_STALE";
         tmux::test_mock::set(pane, tmux::PANE_WAIT_REASON, "permission");
 
-        let ctx = AgentContext {
-            agent: "claude",
-            cwd: "/repo",
-            permission_mode: "default",
-            worktree: &None,
-            session_id: &None,
-        };
+        let ctx = AgentContext::test("claude", "/repo", "default");
         let notifications = desktop_notification::DesktopNotificationSettings {
             enabled: false,
             events: Default::default(),
@@ -337,13 +295,7 @@ mod tests {
     fn on_permission_denied_records_permission_denied_wait_reason() {
         let _guard = tmux::test_mock::install();
         let pane = "%PD";
-        let ctx = AgentContext {
-            agent: "claude",
-            cwd: "/repo",
-            permission_mode: "default",
-            worktree: &None,
-            session_id: &None,
-        };
+        let ctx = AgentContext::test("claude", "/repo", "default");
         let notifications = desktop_notification::DesktopNotificationSettings {
             enabled: false,
             events: Default::default(),

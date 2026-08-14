@@ -60,6 +60,9 @@ fn copy_keys(map: &mut Map<String, Value>, pairs: &[(&str, &str)]) {
 
 impl EventAdapter for OpenCodeAdapter {
     fn parse(&self, event_name: &str, input: &Value) -> Option<AgentEvent> {
+        let model = optional_str(input, "model");
+        let effort = optional_str(input, "effort");
+
         match event_name {
             "session-start" => Some(AgentEvent::SessionStart {
                 agent: OPENCODE_AGENT.into(),
@@ -69,6 +72,8 @@ impl EventAdapter for OpenCodeAdapter {
                 worktree: None,
                 agent_id: None,
                 session_id: optional_str(input, "session_id"),
+                model,
+                effort,
             }),
             "user-prompt-submit" => Some(AgentEvent::UserPromptSubmit {
                 agent: OPENCODE_AGENT.into(),
@@ -78,6 +83,8 @@ impl EventAdapter for OpenCodeAdapter {
                 worktree: None,
                 agent_id: None,
                 session_id: optional_str(input, "session_id"),
+                model,
+                effort,
             }),
             "notification" => Some(AgentEvent::Notification {
                 agent: OPENCODE_AGENT.into(),
@@ -88,6 +95,8 @@ impl EventAdapter for OpenCodeAdapter {
                 worktree: None,
                 agent_id: None,
                 session_id: optional_str(input, "session_id"),
+                model,
+                effort,
             }),
             "stop" => Some(AgentEvent::Stop {
                 agent: OPENCODE_AGENT.into(),
@@ -98,6 +107,8 @@ impl EventAdapter for OpenCodeAdapter {
                 worktree: None,
                 agent_id: None,
                 session_id: optional_str(input, "session_id"),
+                model,
+                effort,
             }),
             "stop-failure" => Some(AgentEvent::StopFailure {
                 agent: OPENCODE_AGENT.into(),
@@ -107,6 +118,8 @@ impl EventAdapter for OpenCodeAdapter {
                 worktree: None,
                 agent_id: None,
                 session_id: optional_str(input, "session_id"),
+                model,
+                effort,
             }),
             "activity-log" => {
                 let raw_name = json_str(input, "tool_name");
@@ -151,6 +164,8 @@ mod tests {
                 worktree: None,
                 agent_id: None,
                 session_id: Some("ses-1".into()),
+                model: None,
+                effort: None,
             }
         );
     }
@@ -174,6 +189,8 @@ mod tests {
                 worktree: None,
                 agent_id: None,
                 session_id: None,
+                model: None,
+                effort: None,
             }
         );
     }
@@ -324,6 +341,8 @@ mod tests {
                 worktree: None,
                 agent_id: None,
                 session_id: Some("ses-1".into()),
+                model: None,
+                effort: None,
             }
         );
     }

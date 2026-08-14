@@ -108,13 +108,7 @@ mod tests {
     }
 
     fn basic_ctx() -> AgentContext<'static> {
-        AgentContext {
-            agent: "claude",
-            cwd: "/repo",
-            permission_mode: "default",
-            worktree: &None,
-            session_id: &None,
-        }
+        AgentContext::test("claude", "/repo", "default")
     }
 
     #[test]
@@ -177,12 +171,15 @@ mod tests {
     fn on_session_start_sets_agent_and_idle_status() {
         let _guard = tmux::test_mock::install();
         let pane = "%NEW_SESSION";
+        let sid = Some("sess-123".into());
         let ctx = AgentContext {
             agent: "claude",
             cwd: "/repo",
             permission_mode: "default",
             worktree: &None,
-            session_id: &Some("sess-123".into()),
+            session_id: &sid,
+            model: &None,
+            effort: &None,
         };
 
         let exit = on_session_start(pane, &ctx, "");
@@ -232,13 +229,7 @@ mod tests {
         tmux::test_mock::set(pane, PENDING_SESSION_END, "1");
         tmux::test_mock::set(pane, PENDING_WORKTREE_REMOVE, "1");
 
-        let ctx = AgentContext {
-            agent: "claude",
-            cwd: "/repo",
-            permission_mode: "default",
-            worktree: &None,
-            session_id: &None,
-        };
+        let ctx = AgentContext::test("claude", "/repo", "default");
         on_session_start(pane, &ctx, "");
 
         assert!(

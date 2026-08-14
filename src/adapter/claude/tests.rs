@@ -21,6 +21,8 @@ fn session_start() {
             worktree: None,
             agent_id: None,
             session_id: None,
+            model: None,
+            effort: None,
         }
     );
 }
@@ -80,6 +82,8 @@ fn user_prompt_submit() {
             worktree: None,
             agent_id: None,
             session_id: None,
+            model: None,
+            effort: None,
         }
     );
 }
@@ -101,6 +105,8 @@ fn notification() {
             worktree: None,
             agent_id: None,
             session_id: None,
+            model: None,
+            effort: None,
         }
     );
 }
@@ -122,6 +128,8 @@ fn notification_idle_prompt_is_meta_only() {
             worktree: None,
             agent_id: None,
             session_id: None,
+            model: None,
+            effort: None,
         }
     );
 }
@@ -143,6 +151,8 @@ fn stop() {
             worktree: None,
             agent_id: None,
             session_id: None,
+            model: None,
+            effort: None,
         }
     );
 }
@@ -162,6 +172,8 @@ fn stop_failure_upstream_error_type_field() {
             worktree: None,
             agent_id: None,
             session_id: None,
+            model: None,
+            effort: None,
         }
     );
 }
@@ -181,6 +193,8 @@ fn stop_failure_legacy_error_field() {
             worktree: None,
             agent_id: None,
             session_id: None,
+            model: None,
+            effort: None,
         }
     );
 }
@@ -200,6 +214,8 @@ fn stop_failure_falls_back_to_error_message() {
             worktree: None,
             agent_id: None,
             session_id: None,
+            model: None,
+            effort: None,
         }
     );
 }
@@ -219,6 +235,8 @@ fn stop_failure_falls_back_to_error_details() {
             worktree: None,
             agent_id: None,
             session_id: None,
+            model: None,
+            effort: None,
         }
     );
 }
@@ -540,6 +558,8 @@ fn notification_empty_reason() {
             worktree: None,
             agent_id: None,
             session_id: None,
+            model: None,
+            effort: None,
         }
     );
 }
@@ -598,6 +618,8 @@ fn stop_failure_error_type_takes_priority_over_legacy() {
             worktree: None,
             agent_id: None,
             session_id: None,
+            model: None,
+            effort: None,
         }
     );
 }
@@ -617,6 +639,8 @@ fn stop_failure_both_empty() {
             worktree: None,
             agent_id: None,
             session_id: None,
+            model: None,
+            effort: None,
         }
     );
 }
@@ -637,6 +661,8 @@ fn stop_empty_last_message() {
             worktree: None,
             agent_id: None,
             session_id: None,
+            model: None,
+            effort: None,
         }
     );
 }
@@ -705,6 +731,8 @@ fn permission_denied_event() {
             worktree: None,
             agent_id: None,
             session_id: None,
+            model: None,
+            effort: None,
         }
     );
 }
@@ -788,6 +816,8 @@ fn session_start_missing_fields_default_to_empty() {
             worktree: None,
             agent_id: None,
             session_id: None,
+            model: None,
+            effort: None,
         }
     );
 }

@@ -60,6 +60,10 @@ pub const PANE_PROMPT_SOURCE: &str = "@pane_prompt_source";
 /// sidebar pane itself) so the TUI can exclude itself from the
 /// agent list.
 pub const PANE_ROLE: &str = "@pane_role";
+/// Model name in use by the agent (e.g. `gemini-3.7-flash`, `claude-3-7-sonnet`).
+pub const PANE_MODEL: &str = "@pane_model";
+/// Reasoning effort level in use by the agent (e.g. `low`, `medium`, `high`).
+pub const PANE_EFFORT: &str = "@pane_effort";
 /// Agent-provided session id, surfaced in the status line for
 /// quick reference.
 pub const PANE_SESSION_ID: &str = "@pane_session_id";
@@ -97,6 +101,7 @@ pub const SIDEBAR_COLOR_ACCENT: &str = "@sidebar_color_accent";
 pub const SIDEBAR_COLOR_BORDER: &str = "@sidebar_color_border";
 pub const SIDEBAR_COLOR_ALL: &str = "@sidebar_color_all";
 pub const SIDEBAR_COLOR_RUNNING: &str = "@sidebar_color_running";
+pub const SIDEBAR_COLOR_RUNNING_SPINNER: &str = "@sidebar_color_running_spinner";
 pub const SIDEBAR_COLOR_WAITING: &str = "@sidebar_color_waiting";
 pub const SIDEBAR_COLOR_IDLE: &str = "@sidebar_color_idle";
 pub const SIDEBAR_COLOR_ERROR: &str = "@sidebar_color_error";

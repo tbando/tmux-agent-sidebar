@@ -59,10 +59,20 @@ fn handle_event(pane: &str, agent_name: &str, event: AgentEvent) -> i32 {
             source,
             worktree,
             session_id,
+            model,
+            effort,
             ..
         } => handlers::on_session_start(
             pane,
-            &context::make_ctx(&agent, &cwd, &permission_mode, &worktree, &session_id),
+            &context::make_ctx(
+                &agent,
+                &cwd,
+                &permission_mode,
+                &worktree,
+                &session_id,
+                &model,
+                &effort,
+            ),
             &source,
         ),
         AgentEvent::SessionEnd { end_reason } => {
@@ -76,10 +86,20 @@ fn handle_event(pane: &str, agent_name: &str, event: AgentEvent) -> i32 {
             prompt,
             worktree,
             session_id,
+            model,
+            effort,
             ..
         } => handlers::on_user_prompt_submit(
             pane,
-            &context::make_ctx(&agent, &cwd, &permission_mode, &worktree, &session_id),
+            &context::make_ctx(
+                &agent,
+                &cwd,
+                &permission_mode,
+                &worktree,
+                &session_id,
+                &model,
+                &effort,
+            ),
             &prompt,
         ),
         AgentEvent::Notification {
@@ -90,12 +110,22 @@ fn handle_event(pane: &str, agent_name: &str, event: AgentEvent) -> i32 {
             meta_only,
             worktree,
             session_id,
+            model,
+            effort,
             ..
         } => {
             let notifications = notification_settings();
             handlers::on_notification(
                 pane,
-                &context::make_ctx(&agent, &cwd, &permission_mode, &worktree, &session_id),
+                &context::make_ctx(
+                    &agent,
+                    &cwd,
+                    &permission_mode,
+                    &worktree,
+                    &session_id,
+                    &model,
+                    &effort,
+                ),
                 &wait_reason,
                 meta_only,
                 &notifications,
@@ -109,12 +139,22 @@ fn handle_event(pane: &str, agent_name: &str, event: AgentEvent) -> i32 {
             response,
             worktree,
             session_id,
+            model,
+            effort,
             ..
         } => {
             let notifications = notification_settings();
             handlers::on_stop(
                 pane,
-                &context::make_ctx(&agent, &cwd, &permission_mode, &worktree, &session_id),
+                &context::make_ctx(
+                    &agent,
+                    &cwd,
+                    &permission_mode,
+                    &worktree,
+                    &session_id,
+                    &model,
+                    &effort,
+                ),
                 &last_message,
                 response.as_deref(),
                 &notifications,
@@ -127,12 +167,22 @@ fn handle_event(pane: &str, agent_name: &str, event: AgentEvent) -> i32 {
             error,
             worktree,
             session_id,
+            model,
+            effort,
             ..
         } => {
             let notifications = notification_settings();
             handlers::on_stop_failure(
                 pane,
-                &context::make_ctx(&agent, &cwd, &permission_mode, &worktree, &session_id),
+                &context::make_ctx(
+                    &agent,
+                    &cwd,
+                    &permission_mode,
+                    &worktree,
+                    &session_id,
+                    &model,
+                    &effort,
+                ),
                 &error,
                 &notifications,
             )
@@ -155,12 +205,22 @@ fn handle_event(pane: &str, agent_name: &str, event: AgentEvent) -> i32 {
             permission_mode,
             worktree,
             session_id,
+            model,
+            effort,
             ..
         } => {
             let notifications = notification_settings();
             handlers::on_permission_denied(
                 pane,
-                &context::make_ctx(&agent, &cwd, &permission_mode, &worktree, &session_id),
+                &context::make_ctx(
+                    &agent,
+                    &cwd,
+                    &permission_mode,
+                    &worktree,
+                    &session_id,
+                    &model,
+                    &effort,
+                ),
                 &notifications,
             )
         }

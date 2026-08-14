@@ -108,6 +108,8 @@ mod tests {
             permission_mode: "default",
             worktree: &wt,
             session_id: &session_id,
+            model: &None,
+            effort: &None,
         };
         assert_eq!(repo_label_from_ctx(&ctx), Some("user/repo".into()));
     }
@@ -147,6 +149,8 @@ mod tests {
             permission_mode: "default",
             worktree: &wt,
             session_id: &session_id,
+            model: &None,
+            effort: &None,
         };
         assert_eq!(branch_label_from_ctx(&ctx), Some("feature/xyz".into()));
     }

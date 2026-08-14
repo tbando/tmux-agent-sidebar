@@ -28,6 +28,8 @@ pub enum AgentEvent {
         worktree: Option<WorktreeInfo>,
         agent_id: Option<String>,
         session_id: Option<String>,
+        model: Option<String>,
+        effort: Option<String>,
     },
     SessionEnd {
         end_reason: String,
@@ -40,6 +42,8 @@ pub enum AgentEvent {
         worktree: Option<WorktreeInfo>,
         agent_id: Option<String>,
         session_id: Option<String>,
+        model: Option<String>,
+        effort: Option<String>,
     },
     Notification {
         agent: String,
@@ -53,6 +57,8 @@ pub enum AgentEvent {
         worktree: Option<WorktreeInfo>,
         agent_id: Option<String>,
         session_id: Option<String>,
+        model: Option<String>,
+        effort: Option<String>,
     },
     Stop {
         agent: String,
@@ -63,6 +69,8 @@ pub enum AgentEvent {
         worktree: Option<WorktreeInfo>,
         agent_id: Option<String>,
         session_id: Option<String>,
+        model: Option<String>,
+        effort: Option<String>,
     },
     StopFailure {
         agent: String,
@@ -72,6 +80,8 @@ pub enum AgentEvent {
         worktree: Option<WorktreeInfo>,
         agent_id: Option<String>,
         session_id: Option<String>,
+        model: Option<String>,
+        effort: Option<String>,
     },
     SubagentStart {
         agent_type: String,
@@ -95,6 +105,8 @@ pub enum AgentEvent {
         worktree: Option<WorktreeInfo>,
         agent_id: Option<String>,
         session_id: Option<String>,
+        model: Option<String>,
+        effort: Option<String>,
     },
     CwdChanged {
         cwd: String,
@@ -159,6 +171,8 @@ mod tests {
             worktree: None,
             agent_id: None,
             session_id: None,
+            model: None,
+            effort: None,
         };
         match event {
             AgentEvent::SessionStart {
@@ -187,6 +201,8 @@ mod tests {
             worktree: Some(wt.clone()),
             agent_id: Some("abc-123".into()),
             session_id: None,
+            model: None,
+            effort: None,
         };
         match event {
             AgentEvent::SessionStart {

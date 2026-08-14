@@ -8,6 +8,9 @@ use super::context::pane_writes_allowed;
 
 /// Write a single activity entry to the log file and trim if needed.
 pub(super) fn write_activity_entry(pane: &str, tool_name: &str, label: &str) {
+    if tool_name.is_empty() || tool_name == "NO_TOOL_CALL" {
+        return;
+    }
     let log_path = crate::activity::log_file_path(pane);
     let label = sanitize_tmux_value(label);
     let timestamp = local_time_hhmm();
@@ -51,6 +54,29 @@ pub(super) fn handle_activity_log(
             label.as_str()
         };
         tmux::set_pane_option(pane, tmux::PANE_BG_CMD, &sanitize_tmux_value(stored));
+    }
+
+    if tool_name == CanonicalTool::Agent.as_str()
+        && let Some(subagents) = tool_input.get("Subagents").and_then(|v| v.as_array())
+    {
+        let mut current = tmux::get_pane_option_value(pane, tmux::PANE_SUBAGENTS);
+        for (i, sa) in subagents.iter().enumerate() {
+            let role = sa
+                .get("Role")
+                .or_else(|| sa.get("TypeName"))
+                .and_then(|v| v.as_str())
+                .unwrap_or("Subagent");
+            let id = format!("sub-{}", i + 1);
+            current = super::context::append_subagent(&current, role, &id);
+        }
+        tmux::set_pane_option(pane, tmux::PANE_SUBAGENTS, &current);
+    }
+
+    if (tool_name == "manage_subagents" || tool_name == "Agent")
+        && let Some(action) = tool_input.get("Action").and_then(|v| v.as_str())
+        && action == "kill_all"
+    {
+        tmux::unset_pane_option(pane, tmux::PANE_SUBAGENTS);
     }
 
     let current_status = tmux::get_pane_option_value(pane, tmux::PANE_STATUS);

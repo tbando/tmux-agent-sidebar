@@ -44,6 +44,10 @@ impl CodexAdapter {
 
 impl EventAdapter for CodexAdapter {
     fn parse(&self, event_name: &str, input: &Value) -> Option<AgentEvent> {
+        let model = optional_str(input, "model");
+        let effort =
+            optional_str(input, "effort").or_else(|| optional_str(input, "model_reasoning_effort"));
+
         match event_name {
             "session-start" => Some(AgentEvent::SessionStart {
                 agent: CODEX_AGENT.into(),
@@ -53,6 +57,8 @@ impl EventAdapter for CodexAdapter {
                 worktree: None,
                 agent_id: None,
                 session_id: optional_str(input, "session_id"),
+                model,
+                effort,
             }),
             "user-prompt-submit" => Some(AgentEvent::UserPromptSubmit {
                 agent: CODEX_AGENT.into(),
@@ -62,6 +68,8 @@ impl EventAdapter for CodexAdapter {
                 worktree: None,
                 agent_id: None,
                 session_id: optional_str(input, "session_id"),
+                model,
+                effort,
             }),
             "stop" => Some(AgentEvent::Stop {
                 agent: CODEX_AGENT.into(),
@@ -72,6 +80,8 @@ impl EventAdapter for CodexAdapter {
                 worktree: None,
                 agent_id: None,
                 session_id: optional_str(input, "session_id"),
+                model,
+                effort,
             }),
             // Codex's PostToolUse currently fires only for Bash (tool_input is
             // typed `{ command: String }`). Other tools do not emit the hook,
@@ -117,6 +127,8 @@ mod tests {
                 worktree: None,
                 agent_id: None,
                 session_id: Some("sess-codex-1".into()),
+                model: None,
+                effort: None,
             }
         );
     }
@@ -143,6 +155,8 @@ mod tests {
                 worktree: None,
                 agent_id: None,
                 session_id: Some("sess-codex-2".into()),
+                model: None,
+                effort: None,
             }
         );
     }
@@ -167,6 +181,8 @@ mod tests {
                 worktree: None,
                 agent_id: None,
                 session_id: Some("sess-codex-3".into()),
+                model: None,
+                effort: None,
             }
         );
     }
@@ -272,6 +288,8 @@ mod tests {
                 worktree: None,
                 agent_id: None,
                 session_id: None,
+                model: None,
+                effort: None,
             }
         );
     }
@@ -361,6 +379,8 @@ mod tests {
                 worktree: None,
                 agent_id: None,
                 session_id: None,
+                model: None,
+                effort: None,
             }
         );
     }

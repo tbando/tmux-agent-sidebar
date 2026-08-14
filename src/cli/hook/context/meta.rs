@@ -13,6 +13,27 @@ pub(in crate::cli::hook) struct AgentContext<'a> {
     pub(in crate::cli::hook) permission_mode: &'a str,
     pub(in crate::cli::hook) worktree: &'a Option<WorktreeInfo>,
     pub(in crate::cli::hook) session_id: &'a Option<String>,
+    pub(in crate::cli::hook) model: &'a Option<String>,
+    pub(in crate::cli::hook) effort: &'a Option<String>,
+}
+
+#[cfg(test)]
+impl<'a> AgentContext<'a> {
+    pub(in crate::cli::hook) fn test(
+        agent: &'a str,
+        cwd: &'a str,
+        permission_mode: &'a str,
+    ) -> Self {
+        Self {
+            agent,
+            cwd,
+            permission_mode,
+            worktree: &None,
+            session_id: &None,
+            model: &None,
+            effort: &None,
+        }
+    }
 }
 
 pub(in crate::cli::hook) fn make_ctx<'a>(
@@ -21,6 +42,8 @@ pub(in crate::cli::hook) fn make_ctx<'a>(
     permission_mode: &'a str,
     worktree: &'a Option<WorktreeInfo>,
     session_id: &'a Option<String>,
+    model: &'a Option<String>,
+    effort: &'a Option<String>,
 ) -> AgentContext<'a> {
     AgentContext {
         agent,
@@ -28,6 +51,8 @@ pub(in crate::cli::hook) fn make_ctx<'a>(
         permission_mode,
         worktree,
         session_id,
+        model,
+        effort,
     }
 }
 
@@ -39,6 +64,18 @@ pub(in crate::cli::hook) fn set_agent_meta(pane: &str, ctx: &AgentContext<'_>) {
     // write behind the same subagent guard as the cwd/worktree fields.
     if !ctx.permission_mode.is_empty() && pane_writes_allowed(pane) {
         tmux::set_pane_option(pane, tmux::PANE_PERMISSION_MODE, ctx.permission_mode);
+    }
+    if let Some(model) = ctx.model
+        && !model.is_empty()
+        && pane_writes_allowed(pane)
+    {
+        tmux::set_pane_option(pane, tmux::PANE_MODEL, model);
+    }
+    if let Some(effort) = ctx.effort
+        && !effort.is_empty()
+        && pane_writes_allowed(pane)
+    {
+        tmux::set_pane_option(pane, tmux::PANE_EFFORT, effort);
     }
     sync_pane_location(pane, ctx.cwd, ctx.worktree, ctx.session_id);
 }
@@ -65,6 +102,8 @@ pub(in crate::cli::hook) fn clear_all_meta(pane: &str) {
         tmux::PANE_WORKTREE_NAME,
         tmux::PANE_WORKTREE_BRANCH,
         tmux::PANE_SESSION_ID,
+        tmux::PANE_MODEL,
+        tmux::PANE_EFFORT,
         PENDING_SESSION_END,
         PENDING_WORKTREE_REMOVE,
     ] {
@@ -98,12 +137,16 @@ mod tests {
         let pm = "auto".to_string();
         let worktree: Option<WorktreeInfo> = None;
         let sid: Option<String> = None;
-        let ctx = make_ctx(&agent, &cwd, &pm, &worktree, &sid);
+        let model = Some("claude-3-7-sonnet".to_string());
+        let effort = Some("high".to_string());
+        let ctx = make_ctx(&agent, &cwd, &pm, &worktree, &sid, &model, &effort);
         assert_eq!(ctx.agent, "claude");
         assert_eq!(ctx.cwd, "/tmp");
         assert_eq!(ctx.permission_mode, "auto");
         assert!(ctx.worktree.is_none());
         assert!(ctx.session_id.is_none());
+        assert_eq!(ctx.model, &Some("claude-3-7-sonnet".to_string()));
+        assert_eq!(ctx.effort, &Some("high".to_string()));
     }
 
     #[test]
@@ -118,7 +161,9 @@ mod tests {
             original_repo_dir: "/home/user/repo".into(),
         });
         let sid = Some("sess-abc".to_string());
-        let ctx = make_ctx(&agent, &cwd, &pm, &worktree, &sid);
+        let model = None;
+        let effort = None;
+        let ctx = make_ctx(&agent, &cwd, &pm, &worktree, &sid, &model, &effort);
         assert_eq!(ctx.agent, "codex");
         assert_eq!(ctx.cwd, "/src");
         assert_eq!(ctx.permission_mode, "plan");
@@ -207,13 +252,7 @@ mod tests {
         // A subagent fires a hook with `permission_mode: "default"` —
         // this must NOT flip the parent badge from "plan" back to
         // "default".
-        let ctx = AgentContext {
-            agent: "claude",
-            cwd: "/repo",
-            permission_mode: "default",
-            worktree: &None,
-            session_id: &None,
-        };
+        let ctx = AgentContext::test("claude", "/repo", "default");
         set_agent_meta(pane, &ctx);
 
         assert_eq!(
@@ -228,13 +267,7 @@ mod tests {
         let _guard = tmux::test_mock::install();
         let pane = "%LONE_PERM";
 
-        let ctx = AgentContext {
-            agent: "claude",
-            cwd: "/repo",
-            permission_mode: "plan",
-            worktree: &None,
-            session_id: &None,
-        };
+        let ctx = AgentContext::test("claude", "/repo", "plan");
         set_agent_meta(pane, &ctx);
 
         assert_eq!(

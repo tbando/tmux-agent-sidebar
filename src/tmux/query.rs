@@ -5,10 +5,10 @@ use crate::process::{ProcessSnapshot, command_basename};
 
 use super::commands::run_tmux;
 use super::options::{
-    PANE_AGENT, PANE_ATTENTION, PANE_BG_CMD, PANE_CWD, PANE_NAME, PANE_PENDING_SESSION_END,
-    PANE_PENDING_WORKTREE_REMOVE, PANE_PERMISSION_MODE, PANE_PROMPT, PANE_PROMPT_SOURCE, PANE_ROLE,
-    PANE_SESSION_ID, PANE_STARTED_AT, PANE_STATUS, PANE_SUBAGENTS, PANE_WAIT_REASON,
-    PANE_WORKTREE_BRANCH, PANE_WORKTREE_NAME, unset_pane_option,
+    PANE_AGENT, PANE_ATTENTION, PANE_BG_CMD, PANE_CWD, PANE_EFFORT, PANE_MODEL, PANE_NAME,
+    PANE_PENDING_SESSION_END, PANE_PENDING_WORKTREE_REMOVE, PANE_PERMISSION_MODE, PANE_PROMPT,
+    PANE_PROMPT_SOURCE, PANE_ROLE, PANE_SESSION_ID, PANE_STARTED_AT, PANE_STATUS, PANE_SUBAGENTS,
+    PANE_WAIT_REASON, PANE_WORKTREE_BRANCH, PANE_WORKTREE_NAME, unset_pane_option,
 };
 use super::types::{
     AgentType, CODEX_AGENT, PaneInfo, PaneStatus, PermissionMode, SessionInfo, WindowInfo,
@@ -28,7 +28,7 @@ mod session_line_field {
     /// Index where the per-pane field suffix consumed by `parse_pane_line` begins.
     pub const PANE_LINE_OFFSET: usize = 6;
     /// Minimum number of fields a valid `pane_format()` line must contain.
-    pub const MIN_FIELDS: usize = 28;
+    pub const MIN_FIELDS: usize = 30;
 }
 
 // Indices into the pane-line suffix that `parse_pane_line` operates on.
@@ -57,9 +57,11 @@ pub(super) mod pane_line_field {
     pub const SESSION_ID: usize = 19; // absolute 25 (@pane_session_id)
     pub const SIDEBAR_SPAWNED: usize = 20; // absolute 26 (@agent-sidebar-spawned)
     pub const BG_CMD: usize = 21; // absolute 27 (@pane_bg_cmd)
+    pub const MODEL: usize = 22; // absolute 28 (@pane_model)
+    pub const EFFORT: usize = 23; // absolute 29 (@pane_effort)
     /// Minimum number of fields the pane-line suffix must contain.
     /// Equals `session_line_field::MIN_FIELDS - PANE_LINE_OFFSET`.
-    pub const MIN_FIELDS: usize = 22;
+    pub const MIN_FIELDS: usize = 24;
 }
 
 /// Build the tmux `list-panes -F` format used by [`query_sessions`].
@@ -95,6 +97,8 @@ fn pane_format() -> String {
         q(PANE_SESSION_ID),
         q(SPAWNED_OPTION),
         q(PANE_BG_CMD),
+        q(PANE_MODEL),
+        q(PANE_EFFORT),
     ]
     .join("|")
 }
@@ -184,7 +188,7 @@ fn build_session_hierarchy(
             });
 
         if let Some(pane) = parse_pane_fields_with_processes(pane_fields, process_snapshot) {
-            if pane.agent == AgentType::Codex
+            if matches!(pane.agent, AgentType::Codex | AgentType::Antigravity)
                 && let Some(pid) = pane.pane_pid
             {
                 codex_pids.push((window_id.to_string(), window.panes.len(), pid));
@@ -196,7 +200,7 @@ fn build_session_hierarchy(
     (sessions_map, codex_pids)
 }
 
-/// Fan out Codex permission mode updates to every Codex pane across every
+/// Resolve Codex / Antigravity permission modes by inspecting descendant processes for each
 /// window using the same single process snapshot used for shell-fallback checks.
 fn resolve_codex_permission_modes(
     sessions_map: &mut SessionMap,
@@ -298,9 +302,9 @@ fn parse_pane_fields_with_processes(
         parts[pane_line_field::PANE_CURRENT_PATH].to_string()
     };
 
-    // Claude: read permission_mode from hook-set tmux variable.
-    // Codex / OpenCode: no permission_mode in hooks, keep the default.
-    let permission_mode = if agent == AgentType::Claude {
+    // Claude / Antigravity: read permission_mode from hook-set tmux variable.
+    // Codex / OpenCode: no permission_mode in hooks, keep the default (resolved via process scan).
+    let permission_mode = if matches!(agent, AgentType::Claude | AgentType::Antigravity) {
         PermissionMode::from_label(&parts[pane_line_field::PERMISSION_MODE])
     } else {
         PermissionMode::Default
@@ -348,6 +352,22 @@ fn parse_pane_fields_with_processes(
                 Some(raw.to_string())
             }
         },
+        model: {
+            let raw = &parts[pane_line_field::MODEL];
+            if raw.is_empty() {
+                None
+            } else {
+                Some(raw.to_string())
+            }
+        },
+        effort: {
+            let raw = &parts[pane_line_field::EFFORT];
+            if raw.is_empty() {
+                None
+            } else {
+                Some(raw.to_string())
+            }
+        },
     })
 }
 
@@ -371,6 +391,8 @@ fn clear_agent_pane_state(pane_id: &str) {
         PANE_WORKTREE_NAME,
         PANE_WORKTREE_BRANCH,
         PANE_SESSION_ID,
+        PANE_MODEL,
+        PANE_EFFORT,
         PANE_PENDING_SESSION_END,
         PANE_PENDING_WORKTREE_REMOVE,
         PANE_STARTED_AT,
@@ -431,6 +453,20 @@ fn detect_codex_permission_mode(args: &str) -> PermissionMode {
     PermissionMode::Default
 }
 
+/// Detect Antigravity permission mode from process args (--dangerously-skip-permissions, --mode plan, etc.)
+fn detect_antigravity_permission_mode(args: &str) -> PermissionMode {
+    if args.contains("--dangerously-skip-permissions") {
+        return PermissionMode::BypassPermissions;
+    }
+    if args.contains("--mode plan") || args.contains("--mode=plan") {
+        return PermissionMode::Plan;
+    }
+    if args.contains("--mode accept-edits") || args.contains("--mode=accept-edits") {
+        return PermissionMode::AcceptEdits;
+    }
+    PermissionMode::Default
+}
+
 fn process_snapshot_for_panes(all_panes_output: &str) -> Option<ProcessSnapshot> {
     if !pane_output_needs_process_snapshot(all_panes_output) {
         return None;
@@ -445,9 +481,61 @@ fn pane_output_needs_process_snapshot(all_panes_output: &str) -> bool {
             return false;
         }
         let pane_fields = &parts[session_line_field::PANE_LINE_OFFSET..];
-        AgentType::from_label(&pane_fields[pane_line_field::AGENT])
-            .is_some_and(|agent| matches!(agent, AgentType::Codex | AgentType::OpenCode))
+        AgentType::from_label(&pane_fields[pane_line_field::AGENT]).is_some_and(|agent| {
+            matches!(
+                agent,
+                AgentType::Codex | AgentType::OpenCode | AgentType::Antigravity
+            )
+        })
     })
+}
+
+fn detect_process_model_and_effort(
+    args: &str,
+    agent: &AgentType,
+) -> (Option<String>, Option<String>) {
+    let mut model = None;
+    let mut effort = None;
+
+    let tokens: Vec<&str> = args.split_whitespace().collect();
+    for (i, token) in tokens.iter().enumerate() {
+        if let Some(val) = token.strip_prefix("--model=") {
+            model = Some(val.trim_matches(|c| c == '"' || c == '\'').to_string());
+        } else if (*token == "--model"
+            || (*token == "-m"
+                && matches!(
+                    agent,
+                    AgentType::Codex | AgentType::OpenCode | AgentType::Antigravity
+                )))
+            && i + 1 < tokens.len()
+            && !tokens[i + 1].starts_with('-')
+        {
+            model = Some(
+                tokens[i + 1]
+                    .trim_matches(|c| c == '"' || c == '\'')
+                    .to_string(),
+            );
+        }
+
+        if let Some(val) = token.strip_prefix("--effort=") {
+            effort = Some(val.trim_matches(|c| c == '"' || c == '\'').to_string());
+        } else if (*token == "--effort" || *token == "--reasoning-effort")
+            && i + 1 < tokens.len()
+            && !tokens[i + 1].starts_with('-')
+        {
+            effort = Some(
+                tokens[i + 1]
+                    .trim_matches(|c| c == '"' || c == '\'')
+                    .to_string(),
+            );
+        } else if token.contains("model_reasoning_effort")
+            && let Some((_, val)) = token.split_once('=')
+        {
+            effort = Some(val.trim_matches(|c| c == '"' || c == '\'').to_string());
+        }
+    }
+
+    (model, effort)
 }
 
 fn apply_codex_permission_modes(
@@ -461,13 +549,30 @@ fn apply_codex_permission_modes(
             let Some(info) = process_snapshot.info_by_pid.get(&descendant) else {
                 continue;
             };
-            if command_basename(&info.comm) != CODEX_AGENT {
-                continue;
-            }
+            let comm = command_basename(&info.comm);
             if let Some(pane) = panes.get_mut(*idx) {
-                pane.permission_mode = detect_codex_permission_mode(&info.args);
-                if pane.permission_mode != PermissionMode::Default {
-                    break;
+                if pane.model.is_none() || pane.effort.is_none() {
+                    let (m, e) = detect_process_model_and_effort(&info.args, &pane.agent);
+                    if pane.model.is_none() && m.is_some() {
+                        pane.model = m;
+                    }
+                    if pane.effort.is_none() && e.is_some() {
+                        pane.effort = e;
+                    }
+                }
+                if pane.agent == AgentType::Codex && comm == CODEX_AGENT {
+                    pane.permission_mode = detect_codex_permission_mode(&info.args);
+                    if pane.permission_mode != PermissionMode::Default {
+                        break;
+                    }
+                } else if pane.agent == AgentType::Antigravity
+                    && matches!(comm, "agy" | "antigravity")
+                    && pane.permission_mode == PermissionMode::Default
+                {
+                    pane.permission_mode = detect_antigravity_permission_mode(&info.args);
+                    if pane.permission_mode != PermissionMode::Default {
+                        break;
+                    }
                 }
             }
         }
@@ -515,8 +620,12 @@ fn parse_subagents(raw: &str) -> Vec<String> {
         .filter(|s| !s.is_empty())
         .map(|entry| match entry.split_once(':') {
             Some((ty, id)) if !id.is_empty() => {
-                let prefix: String = id.chars().take(ID_PREFIX_LEN).collect();
-                format!("{} #{}", ty, prefix)
+                let label = if let Some(suffix) = id.strip_prefix("sub-") {
+                    suffix.to_string()
+                } else {
+                    id.chars().take(ID_PREFIX_LEN).collect()
+                };
+                format!("{} #{}", ty, label)
             }
             _ => entry.to_string(),
         })
@@ -604,6 +713,8 @@ mod tests {
             session_name: String::new(),
             sidebar_spawned: false,
             bg_shell_cmd: None,
+            model: None,
+            effort: None,
         }
     }
 
@@ -638,6 +749,31 @@ mod tests {
 
         apply_codex_permission_modes(&mut panes, &pids, &snapshot);
         assert_eq!(panes[0].permission_mode, PermissionMode::Auto);
+    }
+
+    #[test]
+    fn apply_antigravity_permission_modes_from_ps() {
+        let mut pane = test_pane_codex("%1");
+        pane.agent = AgentType::Antigravity;
+        let mut panes = vec![pane];
+        let pids = vec![(0, 101)];
+
+        let ps_out = "101 1 bash /bin/bash\n102 101 agy /root/.local/bin/agy --mode plan\n";
+        let snapshot = ProcessSnapshot::from_ps_output(ps_out);
+        apply_codex_permission_modes(&mut panes, &pids, &snapshot);
+        assert_eq!(panes[0].permission_mode, PermissionMode::Plan);
+
+        panes[0].permission_mode = PermissionMode::Default;
+        let ps_out = "101 1 bash /bin/bash\n102 101 agy /root/.local/bin/agy --mode=accept-edits\n";
+        let snapshot = ProcessSnapshot::from_ps_output(ps_out);
+        apply_codex_permission_modes(&mut panes, &pids, &snapshot);
+        assert_eq!(panes[0].permission_mode, PermissionMode::AcceptEdits);
+
+        panes[0].permission_mode = PermissionMode::Default;
+        let ps_out = "101 1 bash /bin/bash\n102 101 agy /root/.local/bin/agy --dangerously-skip-permissions\n";
+        let snapshot = ProcessSnapshot::from_ps_output(ps_out);
+        apply_codex_permission_modes(&mut panes, &pids, &snapshot);
+        assert_eq!(panes[0].permission_mode, PermissionMode::BypassPermissions);
     }
 
     #[test]
@@ -760,8 +896,9 @@ mod tests {
         // falls back to the bare type name.
         assert_eq!(
             parse_subagents("Explore,Plan:sub-999"),
-            vec!["Explore", "Plan #sub-"]
+            vec!["Explore", "Plan #999"]
         );
+        assert_eq!(parse_subagents("Idle Tester:sub-1"), vec!["Idle Tester #1"]);
     }
 
     // ─── parse_pane_line tests ──────────────────────────────────────
@@ -794,6 +931,8 @@ mod tests {
             "",                   // 19: @pane_session_id
             "",                   // 20: @agent-sidebar-spawned
             "",                   // 21: @pane_bg_cmd
+            "",                   // 22: @pane_model
+            "",                   // 23: @pane_effort
         ]
     }
 
@@ -1190,6 +1329,8 @@ mod tests {
                     session_name: String::new(),
                     sidebar_spawned: false,
                     bg_shell_cmd: None,
+                    model: None,
+                    effort: None,
                 }],
             },
         );
@@ -1251,8 +1392,8 @@ mod tests {
         // 20:@pane_subagents|21:@pane_cwd|22:@pane_permission_mode|
         // 23:@pane_worktree_name|24:@pane_worktree_branch|
         // 25:@pane_session_id|26:@agent-sidebar-spawned|27:@pane_bg_cmd
-        // 28 total fields (MIN_FIELDS = 28)
-        let mut fields: Vec<&str> = vec![""; 28];
+        // 30 total fields (MIN_FIELDS = 30)
+        let mut fields: Vec<&str> = vec![""; 30];
         fields[0] = session_name;
         fields[1] = "@0"; // window_id
         fields[3] = "win"; // window_name

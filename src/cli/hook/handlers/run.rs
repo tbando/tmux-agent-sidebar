@@ -24,13 +24,14 @@ pub(in crate::cli::hook) fn on_user_prompt_submit(
     set_attention(pane, "clear");
     set_status(pane, "running");
     set_notification_run_id(pane);
-    if !prompt.is_empty() && !is_system_message(prompt) {
+    if !prompt.is_empty() && !is_system_message(prompt) && prompt != "NO_TOOL_CALL" {
         let p = sanitize_tmux_value(prompt);
         tmux::set_pane_option(pane, tmux::PANE_PROMPT, &p);
         tmux::set_pane_option(pane, tmux::PANE_PROMPT_SOURCE, "user");
     }
     tmux::set_pane_option(pane, tmux::PANE_STARTED_AT, &now_epoch_secs().to_string());
     tmux::unset_pane_option(pane, tmux::PANE_WAIT_REASON);
+    tmux::unset_pane_option(pane, tmux::PANE_SUBAGENTS);
     0
 }
 
@@ -43,7 +44,7 @@ pub(in crate::cli::hook) fn on_stop(
 ) -> i32 {
     set_agent_meta(pane, ctx);
     set_attention(pane, "clear");
-    if !last_message.is_empty() {
+    if !last_message.is_empty() && last_message != "NO_TOOL_CALL" {
         let msg = sanitize_tmux_value(last_message);
         tmux::set_pane_option(pane, tmux::PANE_PROMPT, &msg);
         tmux::set_pane_option(pane, tmux::PANE_PROMPT_SOURCE, "response");
@@ -54,7 +55,11 @@ pub(in crate::cli::hook) fn on_stop(
     // running. Treat any leftover list as stale state from a missed or
     // mismatched SubagentStop and clear it before `mark_task_reset`, whose
     // guard intentionally skips writes while subagents are active.
-    tmux::unset_pane_option(pane, tmux::PANE_SUBAGENTS);
+    // In Antigravity, subagents are asynchronous and continue running
+    // across turns, so preserve them until the run/subagent completes.
+    if ctx.agent != "antigravity" {
+        tmux::unset_pane_option(pane, tmux::PANE_SUBAGENTS);
+    }
     if bg_shell_live {
         tmux::unset_pane_option(pane, tmux::PANE_WAIT_REASON);
     } else {
@@ -154,13 +159,7 @@ mod tests {
     fn on_user_prompt_submit_sets_running_and_stores_prompt() {
         let _guard = tmux::test_mock::install();
         let pane = "%PROMPT";
-        let ctx = AgentContext {
-            agent: "claude",
-            cwd: "/repo",
-            permission_mode: "default",
-            worktree: &None,
-            session_id: &None,
-        };
+        let ctx = AgentContext::test("claude", "/repo", "default");
         let exit = on_user_prompt_submit(pane, &ctx, "fix the bug");
         assert_eq!(exit, 0);
         assert_eq!(
@@ -182,13 +181,7 @@ mod tests {
     fn on_user_prompt_submit_ignores_system_messages() {
         let _guard = tmux::test_mock::install();
         let pane = "%SYS_PROMPT";
-        let ctx = AgentContext {
-            agent: "claude",
-            cwd: "/repo",
-            permission_mode: "default",
-            worktree: &None,
-            session_id: &None,
-        };
+        let ctx = AgentContext::test("claude", "/repo", "default");
         on_user_prompt_submit(pane, &ctx, "<system-reminder>ignore me</system-reminder>");
         assert!(
             !tmux::test_mock::contains(pane, tmux::PANE_PROMPT),
@@ -207,13 +200,7 @@ mod tests {
         let pane = "%PROMPT_CLEAR_WAIT";
         tmux::test_mock::set(pane, tmux::PANE_WAIT_REASON, "permission");
         tmux::test_mock::set(pane, tmux::PANE_BG_CMD, "npm run dev");
-        let ctx = AgentContext {
-            agent: "claude",
-            cwd: "/repo",
-            permission_mode: "default",
-            worktree: &None,
-            session_id: &None,
-        };
+        let ctx = AgentContext::test("claude", "/repo", "default");
         on_user_prompt_submit(pane, &ctx, "new prompt");
         assert!(!tmux::test_mock::contains(pane, tmux::PANE_WAIT_REASON));
         assert_eq!(
@@ -229,13 +216,7 @@ mod tests {
         let pane = "%STOP_BG";
         tmux::test_mock::set(pane, tmux::PANE_BG_CMD, "npm run dev");
         tmux::test_mock::set(pane, tmux::PANE_STARTED_AT, "123");
-        let ctx = AgentContext {
-            agent: "claude",
-            cwd: "/repo",
-            permission_mode: "default",
-            worktree: &None,
-            session_id: &None,
-        };
+        let ctx = AgentContext::test("claude", "/repo", "default");
 
         let exit = on_stop(
             pane,
@@ -264,13 +245,7 @@ mod tests {
         let _guard = tmux::test_mock::install();
         let pane = "%STOP_IDLE";
         tmux::test_mock::set(pane, tmux::PANE_STARTED_AT, "123");
-        let ctx = AgentContext {
-            agent: "claude",
-            cwd: "/repo",
-            permission_mode: "default",
-            worktree: &None,
-            session_id: &None,
-        };
+        let ctx = AgentContext::test("claude", "/repo", "default");
 
         on_stop(
             pane,
@@ -299,13 +274,7 @@ mod tests {
             tmux::PANE_SUBAGENTS,
             "general-purpose:sub-1,general-purpose:sub-2",
         );
-        let ctx = AgentContext {
-            agent: "claude",
-            cwd: "/repo",
-            permission_mode: "default",
-            worktree: &None,
-            session_id: &None,
-        };
+        let ctx = AgentContext::test("claude", "/repo", "default");
 
         on_stop(
             pane,
@@ -332,13 +301,7 @@ mod tests {
     fn on_stop_failure_records_error_wait_reason_and_error_status() {
         let _guard = tmux::test_mock::install();
         let pane = "%STOP_FAIL";
-        let ctx = AgentContext {
-            agent: "claude",
-            cwd: "/repo",
-            permission_mode: "default",
-            worktree: &None,
-            session_id: &None,
-        };
+        let ctx = AgentContext::test("claude", "/repo", "default");
         let exit = on_stop_failure(
             pane,
             &ctx,

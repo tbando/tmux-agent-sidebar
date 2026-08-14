@@ -71,3 +71,56 @@ impl CanonicalTool {
         }
     }
 }
+
+/// Split a model string and separate any trailing reasoning effort suffix
+/// (e.g. `gemini-3.7-flash-medium` -> `("gemini-3.7-flash", Some("medium"))`).
+pub fn split_model_and_effort(
+    raw_model: &str,
+    explicit_effort: Option<&str>,
+) -> (String, Option<String>) {
+    let mut model = raw_model.trim().to_string();
+    let mut effort = explicit_effort
+        .map(|e| e.trim().to_string())
+        .filter(|e| !e.is_empty());
+
+    if effort.is_none() {
+        let lower = model.to_lowercase();
+        const EFFORT_SUFFIXES: &[(&str, &str)] = &[
+            ("-low", "low"),
+            ("-medium", "medium"),
+            ("-med", "medium"),
+            ("-high", "high"),
+            ("-max", "high"),
+            ("-xhigh", "high"),
+            ("/low", "low"),
+            ("/medium", "medium"),
+            ("/med", "medium"),
+            ("/high", "high"),
+            ("/max", "high"),
+            ("/xhigh", "high"),
+        ];
+
+        for &(suffix, eff) in EFFORT_SUFFIXES {
+            if lower.ends_with(suffix) {
+                let cutoff = model.len() - suffix.len();
+                model = model[..cutoff].to_string();
+                effort = Some(eff.to_string());
+                break;
+            }
+        }
+    } else if let Some(ref eff) = effort {
+        let lower = model.to_lowercase();
+        let eff_lower = eff.to_lowercase();
+        let dash_suffix = format!("-{}", eff_lower);
+        let slash_suffix = format!("/{}", eff_lower);
+        if lower.ends_with(&dash_suffix) {
+            let cutoff = model.len() - dash_suffix.len();
+            model = model[..cutoff].to_string();
+        } else if lower.ends_with(&slash_suffix) {
+            let cutoff = model.len() - slash_suffix.len();
+            model = model[..cutoff].to_string();
+        }
+    }
+
+    (model, effort)
+}

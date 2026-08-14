@@ -31,6 +31,10 @@ pub struct PaneInfo {
     /// pane status is `Background` (or `Running` with a backgrounded shell
     /// still alive) so the row body can surface the actual command.
     pub bg_shell_cmd: Option<String>,
+    /// Model name used by the agent (e.g. `gemini-3.7-flash`, `claude-3-7-sonnet`).
+    pub model: Option<String>,
+    /// Reasoning effort level (e.g. `low`, `medium`, `high`).
+    pub effort: Option<String>,
 }
 
 #[derive(Debug, Clone, Default)]

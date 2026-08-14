@@ -308,6 +308,8 @@ fn snapshot_two_agents_same_window_ui() {
         session_name: String::new(),
         sidebar_spawned: false,
         bg_shell_cmd: None,
+        model: None,
+        effort: None,
     };
     let pane2 = PaneInfo {
         pane_id: "%2".into(),
@@ -329,6 +331,8 @@ fn snapshot_two_agents_same_window_ui() {
         session_name: String::new(),
         sidebar_spawned: false,
         bg_shell_cmd: None,
+        model: None,
+        effort: None,
     };
 
     let mut state = make_state(vec![SessionInfo {
@@ -1664,7 +1668,7 @@ fn snapshot_filter_bar_icons_use_selected_and_inactive_colors() {
 
     let styled = render_to_styled_string(&mut state, 30, 25);
     let line = styled.lines().next().unwrap();
-    insta::assert_snapshot!(line, @" ≡[fg:111] 2[fg:255]  ●[fg:245] 1[fg:255]  ◎[fg:245] 0[fg:245]  ◐[fg:245] 0[fg:245]  ○[fg:245] 1[fg:255]  ✕[fg:245] 0[fg:245]");
+    insta::assert_snapshot!(line, @" ≡[fg:12] 2[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 1[fg:15]  ✕[fg:8] 0[fg:8]");
 }
 
 #[test]
@@ -1707,7 +1711,7 @@ fn snapshot_filter_selected_icon_has_color_without_underline() {
     // modifier on the selected filter would surface in the snapshot diff.
     let styled = render_to_styled_string(&mut state, 30, 25);
     let line = styled.lines().next().unwrap();
-    insta::assert_snapshot!(line, @" ≡[fg:245] 2[fg:255]  ●[fg:114] 1[fg:255]  ◎[fg:245] 0[fg:245]  ◐[fg:245] 0[fg:245]  ○[fg:245] 1[fg:255]  ✕[fg:245] 0[fg:245]");
+    insta::assert_snapshot!(line, @" ≡[fg:8] 2[fg:15]  ●[fg:10] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 1[fg:15]  ✕[fg:8] 0[fg:8]");
 }
 
 #[test]
