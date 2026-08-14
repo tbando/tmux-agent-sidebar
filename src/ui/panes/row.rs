@@ -533,13 +533,17 @@ mod tests {
 
         let (icon, color) = running_icon_for(&PaneStatus::Running, 0, &icons, &theme);
         assert_eq!(icon, "●");
-        assert_eq!(color, Some(Color::Indexed(82)));
+        assert_eq!(color, Some(Color::Indexed(10)));
+
+        let (icon, color) = running_icon_for(&PaneStatus::Running, 1, &icons, &theme);
+        assert_eq!(icon, "●");
+        assert_eq!(color, Some(Color::Indexed(15)));
 
         let mut custom_theme = theme.clone();
-        custom_theme.running_spinner = Some(Color::Indexed(10));
+        custom_theme.running_spinner = Some(Color::Indexed(11));
         let (icon, color) = running_icon_for(&PaneStatus::Running, 0, &icons, &custom_theme);
         assert_eq!(icon, "●");
-        assert_eq!(color, Some(Color::Indexed(10)));
+        assert_eq!(color, Some(Color::Indexed(11)));
     }
 
     #[test]

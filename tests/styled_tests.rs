@@ -229,7 +229,7 @@ fn selection_marker_uses_accent_color_with_selection_bg() {
     insta::assert_snapshot!(render_to_styled_string(&mut state, 28, 24), @"
      ≡[fg:12] 1[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 0[fg:8]  ✕[fg:8]
     ⓘ[fg:11]                        —[fg:7] ▾[fg:7]
-    ┃[fg:14,bg:8] [bg:8]●[fg:82,bg:8] [fg:13,bg:8]c[fg:13,bg:8]l[fg:13,bg:8]a[fg:13,bg:8]u[fg:13,bg:8]d[fg:13,bg:8]e[fg:13,bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8]
+    ┃[fg:14,bg:8] [bg:8]●[fg:10,bg:8] [fg:13,bg:8]c[fg:13,bg:8]l[fg:13,bg:8]a[fg:13,bg:8]u[fg:13,bg:8]d[fg:13,bg:8]e[fg:13,bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8]
 
     ╭[fg:8] [fg:8]A[fg:14]c[fg:14]t[fg:14]i[fg:14]v[fg:14]i[fg:14]t[fg:14]y[fg:14] [fg:8]│[fg:8] [fg:8]G[fg:7]i[fg:7]t[fg:7] [fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]╮[fg:8]
     │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]

@@ -1496,7 +1496,7 @@ fn snapshot_focused_group_active_border_styled() {
      ≡[fg:12] 2[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 1[fg:15]  ✕[fg:8]
     ⓘ[fg:11]                        —[fg:7] ▾[fg:7]
     d[fg:14]o[fg:14]t[fg:14]f[fg:14]i[fg:14]l[fg:14]e[fg:14]s[fg:14]
-    ┃[fg:14,bg:8] [bg:8]●[fg:82,bg:8] [fg:13,bg:8]c[fg:13,bg:8]l[fg:13,bg:8]a[fg:13,bg:8]u[fg:13,bg:8]d[fg:13,bg:8]e[fg:13,bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8]
+    ┃[fg:14,bg:8] [bg:8]●[fg:10,bg:8] [fg:13,bg:8]c[fg:13,bg:8]l[fg:13,bg:8]a[fg:13,bg:8]u[fg:13,bg:8]d[fg:13,bg:8]e[fg:13,bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8]
 
     m[fg:15]y[fg:15]-[fg:15]a[fg:15]p[fg:15]p[fg:15]
       ○[fg:14] [fg:5]c[fg:5]o[fg:5]d[fg:5]e[fg:5]x[fg:5]

@@ -150,7 +150,7 @@ fn test_permission_mode_bypass_all_renders_danger_color() {
      ≡[fg:12] 1[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 0[fg:8]  ✕[fg:8]
     ⓘ[fg:11]                        —[fg:7] ▾[fg:7]
     p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]
-    ┃[fg:14] ●[fg:82] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13] [fg:9]![fg:9]
+    ┃[fg:14] ●[fg:10] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13] [fg:9]![fg:9]
 
 
     ╭[fg:8] [fg:8]A[fg:14]c[fg:14]t[fg:14]i[fg:14]v[fg:14]i[fg:14]t[fg:14]y[fg:14] [fg:8]│[fg:8] [fg:8]G[fg:7]i[fg:7]t[fg:7] [fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]╮[fg:8]
@@ -201,7 +201,7 @@ fn test_permission_mode_full_auto_renders_auto_color() {
      ≡[fg:12] 1[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 0[fg:8]  ✕[fg:8]
     ⓘ[fg:11]                        —[fg:7] ▾[fg:7]
     p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]
-    ┃[fg:14] ●[fg:82] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13] [fg:11]a[fg:11]u[fg:11]t[fg:11]o[fg:11]
+    ┃[fg:14] ●[fg:10] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13] [fg:11]a[fg:11]u[fg:11]t[fg:11]o[fg:11]
 
 
     ╭[fg:8] [fg:8]A[fg:14]c[fg:14]t[fg:14]i[fg:14]v[fg:14]i[fg:14]t[fg:14]y[fg:14] [fg:8]│[fg:8] [fg:8]G[fg:7]i[fg:7]t[fg:7] [fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]╮[fg:8]
@@ -324,7 +324,7 @@ fn test_git_summary_modified_uses_badge_auto_color() {
      ≡[fg:12] 1[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 0[fg:8]  ✕[fg:8]
     ⓘ[fg:11]                        —[fg:7] ▾[fg:7]
     p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]
-    ┃[fg:14] ●[fg:82] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
+    ┃[fg:14] ●[fg:10] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
 
     ╭[fg:14] [fg:14]A[fg:7]c[fg:7]t[fg:7]i[fg:7]v[fg:7]i[fg:7]t[fg:7]y[fg:7] [fg:8]│[fg:8] [fg:8]G[fg:14]i[fg:14]t[fg:14] [fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]╮[fg:14]
     │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
@@ -386,7 +386,7 @@ fn test_task_progress_line_uses_task_progress_color() {
      ≡[fg:12] 1[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 0[fg:8]  ✕[fg:8] 0[fg:8]
     ⓘ[fg:11]                                    —[fg:7] ▾[fg:7]
     p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]
-    ┃[fg:14] ●[fg:82] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
+    ┃[fg:14] ●[fg:10] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
        [fg:11] [fg:11]✔[fg:11]◼[fg:11]◻[fg:11] [fg:11]1[fg:11]/[fg:11]3[fg:11]
 
 
@@ -451,7 +451,7 @@ fn test_subagent_line_uses_subagent_color() {
      ≡[fg:12] 1[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 0[fg:8]  ✕[fg:8] 0[fg:8]
     ⓘ[fg:11]                                    —[fg:7] ▾[fg:7]
     p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]
-    ┃[fg:14] ●[fg:82] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
+    ┃[fg:14] ●[fg:10] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
        [fg:7] [fg:7]└[fg:7] [fg:7]E[fg:6]x[fg:6]p[fg:6]l[fg:6]o[fg:6]r[fg:6]e[fg:6] [fg:6]#[fg:6]1[fg:6]
 
 
@@ -565,7 +565,7 @@ fn test_pr_link_uses_pr_link_color() {
      ≡[fg:12] 1[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 0[fg:8]  ✕[fg:8]
     ⓘ[fg:11]                        —[fg:7] ▾[fg:7]
     p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]
-    ┃[fg:14] ●[fg:82] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
+    ┃[fg:14] ●[fg:10] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
 
 
 
@@ -633,7 +633,7 @@ fn test_diff_stat_added_uses_diff_added_color() {
      ≡[fg:12] 1[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 0[fg:8]  ✕[fg:8]
     ⓘ[fg:11]                        —[fg:7] ▾[fg:7]
     p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]
-    ┃[fg:14] ●[fg:82] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
+    ┃[fg:14] ●[fg:10] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
 
 
 
@@ -701,7 +701,7 @@ fn test_diff_stat_deleted_uses_diff_deleted_color() {
      ≡[fg:12] 1[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 0[fg:8]  ✕[fg:8]
     ⓘ[fg:11]                        —[fg:7] ▾[fg:7]
     p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]
-    ┃[fg:14] ●[fg:82] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
+    ┃[fg:14] ●[fg:10] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
 
     ╭[fg:14] [fg:14]A[fg:7]c[fg:7]t[fg:7]i[fg:7]v[fg:7]i[fg:7]t[fg:7]y[fg:7] [fg:8]│[fg:8] [fg:8]G[fg:14]i[fg:14]t[fg:14] [fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]╮[fg:14]
     │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
@@ -760,7 +760,7 @@ fn test_file_change_stat_uses_file_change_color() {
      ≡[fg:12] 1[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 0[fg:8]  ✕[fg:8]
     ⓘ[fg:11]                        —[fg:7] ▾[fg:7]
     p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]
-    ┃[fg:14] ●[fg:82] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
+    ┃[fg:14] ●[fg:10] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
 
     ╭[fg:14] [fg:14]A[fg:7]c[fg:7]t[fg:7]i[fg:7]v[fg:7]i[fg:7]t[fg:7]y[fg:7] [fg:8]│[fg:8] [fg:8]G[fg:14]i[fg:14]t[fg:14] [fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]╮[fg:14]
     │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
@@ -860,7 +860,7 @@ fn test_branch_color_in_agent_panel() {
      ≡[fg:12] 1[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 0[fg:8]  ✕[fg:8] 0[fg:8]
     ⓘ[fg:11]                                    —[fg:7] ▾[fg:7]
     p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]                                +[fg:14]
-    ┃[fg:14] ●[fg:82] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
+    ┃[fg:14] ●[fg:10] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
     ┃[fg:14]  [fg:6] [fg:6]f[fg:6]e[fg:6]a[fg:6]t[fg:6]u[fg:6]r[fg:6]e[fg:6]/[fg:6]c[fg:6]o[fg:6]o[fg:6]l[fg:6]-[fg:6]f[fg:6]e[fg:6]a[fg:6]t[fg:6]u[fg:6]r[fg:6]e[fg:6]
     ");
 }
@@ -957,7 +957,7 @@ fn test_accent_vs_border_inactive_colors() {
      ≡[fg:12] 2[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 1[fg:15]  ✕[fg:8]
     ⓘ[fg:11]                        —[fg:7] ▾[fg:7]
     f[fg:14]o[fg:14]c[fg:14]u[fg:14]s[fg:14]e[fg:14]d[fg:14]-[fg:14]r[fg:14]e[fg:14]p[fg:14]o[fg:14]
-    ┃[fg:14,bg:8] [bg:8]●[fg:82,bg:8] [fg:13,bg:8]c[fg:13,bg:8]l[fg:13,bg:8]a[fg:13,bg:8]u[fg:13,bg:8]d[fg:13,bg:8]e[fg:13,bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8]
+    ┃[fg:14,bg:8] [bg:8]●[fg:10,bg:8] [fg:13,bg:8]c[fg:13,bg:8]l[fg:13,bg:8]a[fg:13,bg:8]u[fg:13,bg:8]d[fg:13,bg:8]e[fg:13,bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8]
 
     u[fg:15]n[fg:15]f[fg:15]o[fg:15]c[fg:15]u[fg:15]s[fg:15]e[fg:15]d[fg:15]-[fg:15]r[fg:15]e[fg:15]p[fg:15]o[fg:15]
       ○[fg:14] [fg:5]c[fg:5]o[fg:5]d[fg:5]e[fg:5]x[fg:5]
@@ -1013,7 +1013,7 @@ fn test_running_status_color_in_output() {
      ≡[fg:12] 1[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 0[fg:8]  ✕[fg:8]
     ⓘ[fg:11]                        —[fg:7] ▾[fg:7]
     p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]
-    ┃[fg:14] ●[fg:82] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
+    ┃[fg:14] ●[fg:10] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
     ");
 }
 
