@@ -1,10 +1,13 @@
+use crate::desktop_notification;
+use crate::desktop_notification::DesktopNotificationKind;
 use crate::time::now_epoch_secs;
 use crate::tmux;
 use crate::tool_name::CanonicalTool;
 
 use super::super::label::extract_tool_label;
-use super::super::{local_time_hhmm, sanitize_tmux_value, set_status};
+use super::super::{local_time_hhmm, sanitize_tmux_value, set_attention, set_status};
 use super::context::pane_writes_allowed;
+use super::notifications::{NotifyLabels, NotifyPayload, notification_settings, notify_lifecycle};
 
 /// Write a single activity entry to the log file and trim if needed.
 pub(super) fn write_activity_entry(pane: &str, tool_name: &str, label: &str) {
@@ -79,16 +82,50 @@ pub(super) fn handle_activity_log(
         tmux::unset_pane_option(pane, tmux::PANE_SUBAGENTS);
     }
 
-    let current_status = tmux::get_pane_option_value(pane, tmux::PANE_STATUS);
-    if current_status != "running" && !current_status.is_empty() {
-        set_status(pane, "running");
-        if current_status == "waiting" {
-            tmux::unset_pane_option(pane, tmux::PANE_ATTENTION);
-            tmux::unset_pane_option(pane, tmux::PANE_WAIT_REASON);
+    if tool_name == CanonicalTool::AskUserQuestion.as_str() {
+        set_status(pane, "waiting");
+        set_attention(pane, "notification");
+        tmux::set_pane_option(pane, tmux::PANE_WAIT_REASON, "elicitation_dialog");
+        if !label.is_empty() {
+            tmux::set_pane_option(pane, tmux::PANE_PROMPT, &sanitize_tmux_value(&label));
+            tmux::set_pane_option(pane, tmux::PANE_PROMPT_SOURCE, "response");
         }
-        let existing_started = tmux::get_pane_option_value(pane, tmux::PANE_STARTED_AT);
-        if existing_started.is_empty() {
-            tmux::set_pane_option(pane, tmux::PANE_STARTED_AT, &now_epoch_secs().to_string());
+        let notifications = notification_settings();
+        let agent = tmux::get_pane_option_value(pane, tmux::PANE_AGENT);
+        let _ = notify_lifecycle(
+            pane,
+            NotifyLabels::FromPane {
+                agent: if agent.is_empty() {
+                    "antigravity"
+                } else {
+                    &agent
+                },
+            },
+            &notifications,
+            None,
+            NotifyPayload {
+                kind: DesktopNotificationKind::PermissionRequired,
+                event: desktop_notification::DesktopNotificationEvent::Notification,
+                fingerprint_suffix: "ask_question",
+                body: if label.is_empty() {
+                    "Waiting for user input"
+                } else {
+                    &label
+                },
+            },
+        );
+    } else {
+        let current_status = tmux::get_pane_option_value(pane, tmux::PANE_STATUS);
+        if current_status != "running" && !current_status.is_empty() {
+            set_status(pane, "running");
+            if current_status == "waiting" {
+                tmux::unset_pane_option(pane, tmux::PANE_ATTENTION);
+                tmux::unset_pane_option(pane, tmux::PANE_WAIT_REASON);
+            }
+            let existing_started = tmux::get_pane_option_value(pane, tmux::PANE_STARTED_AT);
+            if existing_started.is_empty() {
+                tmux::set_pane_option(pane, tmux::PANE_STARTED_AT, &now_epoch_secs().to_string());
+            }
         }
     }
 
@@ -454,5 +491,44 @@ mod tests {
             Some("default"),
             "child EnterPlanMode must not overwrite parent's permission_mode"
         );
+    }
+
+    #[test]
+    fn handle_activity_log_ask_user_question_sets_waiting_and_attention() {
+        let _guard = tmux::test_mock::install();
+        let pane = "%ANTIGRAVITY_ASK";
+        let path = crate::activity::log_file_path(pane);
+        let _ = fs::remove_file(&path);
+        tmux::test_mock::set(pane, tmux::PANE_STATUS, "running");
+        tmux::test_mock::set(pane, tmux::PANE_AGENT, "antigravity");
+
+        handle_activity_log(
+            pane,
+            "AskUserQuestion",
+            &json!({"questions": [{"question": "Which option do you prefer?"}]}),
+            &Value::Null,
+        );
+
+        assert_eq!(
+            tmux::test_mock::get(pane, tmux::PANE_STATUS).as_deref(),
+            Some("waiting")
+        );
+        assert_eq!(
+            tmux::test_mock::get(pane, tmux::PANE_ATTENTION).as_deref(),
+            Some("notification")
+        );
+        assert_eq!(
+            tmux::test_mock::get(pane, tmux::PANE_WAIT_REASON).as_deref(),
+            Some("elicitation_dialog")
+        );
+        assert_eq!(
+            tmux::test_mock::get(pane, tmux::PANE_PROMPT).as_deref(),
+            Some("Which option do you prefer?")
+        );
+        assert_eq!(
+            tmux::test_mock::get(pane, tmux::PANE_PROMPT_SOURCE).as_deref(),
+            Some("response")
+        );
+        fs::remove_file(&path).ok();
     }
 }
