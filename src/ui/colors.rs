@@ -53,42 +53,42 @@ pub struct ColorTheme {
 impl Default for ColorTheme {
     fn default() -> Self {
         Self {
-            accent: Color::Indexed(14),            // bright cyan
-            border_inactive: Color::Indexed(8),    // bright black (dark gray)
-            status_all: Color::Indexed(12),        // bright blue
-            status_running: Color::Indexed(10),    // bright green
-            status_waiting: Color::Indexed(11),    // bright yellow
-            status_idle: Color::Indexed(14),       // bright cyan
-            status_error: Color::Indexed(9),       // bright red
-            status_unknown: Color::Indexed(8),     // bright black (dark gray)
-            filter_inactive: Color::Indexed(8),    // bright black
-            agent_claude: Color::Indexed(13),      // bright magenta
-            agent_codex: Color::Indexed(5),        // magenta
-            agent_opencode: Color::Indexed(6),     // cyan
-            agent_antigravity: Color::Indexed(12), // bright blue
-            pet_body: Color::Indexed(11),          // bright yellow
-            pet_eye: Color::Indexed(10),           // bright green
-            text_active: Color::Indexed(15),       // bright white
-            text_muted: Color::Indexed(7),         // light gray
-            text_inactive: Color::Indexed(8),      // bright black
-            session_header: Color::Indexed(12),    // bright blue
-            port: Color::Indexed(8),               // bright black
-            wait_reason: Color::Indexed(11),       // bright yellow
-            selection_bg: Color::Indexed(8),       // bright black
-            branch: Color::Indexed(6),             // cyan
-            badge_danger: Color::Indexed(9),       // bright red
-            badge_auto: Color::Indexed(11),        // bright yellow
-            badge_plan: Color::Indexed(14),        // bright cyan
-            task_progress: Color::Indexed(11),     // bright yellow
-            subagent: Color::Indexed(6),           // cyan
-            commit_hash: Color::Indexed(11),       // bright yellow
-            diff_added: Color::Indexed(10),        // bright green
-            diff_deleted: Color::Indexed(9),       // bright red
-            file_change: Color::Indexed(11),       // bright yellow
-            pr_link: Color::Indexed(14),           // bright cyan
-            section_title: Color::Indexed(14),     // bright cyan
-            activity_timestamp: Color::Indexed(8), // bright black
-            response_arrow: Color::Indexed(14),    // bright cyan
+            accent: Color::Indexed(14),             // bright cyan
+            border_inactive: Color::Indexed(8),     // bright black (dark gray)
+            status_all: Color::Indexed(12),         // bright blue
+            status_running: Color::Indexed(10),     // bright green
+            status_waiting: Color::Indexed(11),     // bright yellow
+            status_idle: Color::Indexed(14),        // bright cyan
+            status_error: Color::Indexed(9),        // bright red
+            status_unknown: Color::Indexed(8),      // bright black (dark gray)
+            filter_inactive: Color::Indexed(8),     // bright black
+            agent_claude: Color::Indexed(13),       // bright magenta
+            agent_codex: Color::Indexed(5),         // magenta
+            agent_opencode: Color::Indexed(6),      // cyan
+            agent_antigravity: Color::Indexed(12),  // bright blue
+            pet_body: Color::Indexed(11),           // bright yellow
+            pet_eye: Color::Indexed(10),            // bright green
+            text_active: Color::Indexed(15),        // bright white
+            text_muted: Color::Indexed(7),          // light gray
+            text_inactive: Color::Indexed(8),       // bright black
+            session_header: Color::Indexed(12),     // bright blue
+            port: Color::Indexed(8),                // bright black
+            wait_reason: Color::Indexed(11),        // bright yellow
+            selection_bg: Color::Indexed(8),        // bright black
+            branch: Color::Indexed(6),              // cyan
+            badge_danger: Color::Indexed(9),        // bright red
+            badge_auto: Color::Indexed(11),         // bright yellow
+            badge_plan: Color::Indexed(14),         // bright cyan
+            task_progress: Color::Indexed(11),      // bright yellow
+            subagent: Color::Indexed(6),            // cyan
+            commit_hash: Color::Indexed(11),        // bright yellow
+            diff_added: Color::Indexed(10),         // bright green
+            diff_deleted: Color::Indexed(9),        // bright red
+            file_change: Color::Indexed(11),        // bright yellow
+            pr_link: Color::Indexed(14),            // bright cyan
+            section_title: Color::Indexed(14),      // bright cyan
+            activity_timestamp: Color::Indexed(15), // bright gray / bright white
+            response_arrow: Color::Indexed(14),     // bright cyan
             running_spinner: None,
         }
     }
