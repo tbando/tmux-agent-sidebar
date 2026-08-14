@@ -121,6 +121,19 @@ fn basename(path: &str) -> String {
 /// for. Falls back to the prompt's `description` when the response is
 /// missing (e.g. errors) so the entry is never blank.
 fn label_agent(input: &Value, response: &Value) -> String {
+    if let Some(subagents) = input.get("Subagents").and_then(|v| v.as_array()) {
+        let roles: Vec<&str> = subagents
+            .iter()
+            .filter_map(|s| {
+                s.get("Role")
+                    .or_else(|| s.get("TypeName"))
+                    .and_then(|v| v.as_str())
+            })
+            .collect();
+        if !roles.is_empty() {
+            return roles.join(", ");
+        }
+    }
     let response_text = response
         .get("content")
         .and_then(|c| c.as_array())
@@ -134,7 +147,12 @@ fn label_agent(input: &Value, response: &Value) -> String {
         .trim()
         .to_string();
     if response_text.is_empty() {
-        field_str(input, "description")
+        let desc = field_str(input, "description");
+        if desc.is_empty() {
+            field_str(input, "Prompt")
+        } else {
+            desc
+        }
     } else {
         response_text
     }

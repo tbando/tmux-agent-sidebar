@@ -323,9 +323,9 @@ mod tests {
         state.git.pr_number = Some("5".into());
         insta::assert_snapshot!(render_styled(&mut state, 30, 4), @"
 
-        m[fg:255]a[fg:255]i[fg:255]n[fg:255]                        #[fg:117,underline]5[fg:117,underline]
-        ─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]
-              W[fg:252]o[fg:252]r[fg:252]k[fg:252]i[fg:252]n[fg:252]g[fg:252] [fg:252]t[fg:252]r[fg:252]e[fg:252]e[fg:252] [fg:252]c[fg:252]l[fg:252]e[fg:252]a[fg:252]n[fg:252]
+        m[fg:15]a[fg:15]i[fg:15]n[fg:15]                        #[fg:14,underline]5[fg:14,underline]
+        ─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]
+              W[fg:7]o[fg:7]r[fg:7]k[fg:7]i[fg:7]n[fg:7]g[fg:7] [fg:7]t[fg:7]r[fg:7]e[fg:7]e[fg:7] [fg:7]c[fg:7]l[fg:7]e[fg:7]a[fg:7]n[fg:7]
         ");
     }
 
@@ -394,11 +394,11 @@ mod tests {
         state.git.staged_files = vec![file_entry('M', "a.rs", 1, 0)];
         insta::assert_snapshot!(render_styled(&mut state, 40, 6), @"
 
-        m[fg:255]a[fg:255]i[fg:255]n[fg:255]
-                                         1[fg:252] [fg:252]f[fg:252]i[fg:252]l[fg:252]e[fg:252]s[fg:252]
-        ─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]
-        S[fg:109]t[fg:109]a[fg:109]g[fg:109]e[fg:109]d[fg:109] [fg:109]([fg:109]1[fg:109])[fg:109]
-        M[fg:221] a[fg:252].[fg:252]r[fg:252]s[fg:252]                             +[fg:114]1[fg:114]/[fg:252]-[fg:174]0[fg:174]
+        m[fg:15]a[fg:15]i[fg:15]n[fg:15]
+                                         1[fg:7] [fg:7]f[fg:7]i[fg:7]l[fg:7]e[fg:7]s[fg:7]
+        ─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]
+        S[fg:14]t[fg:14]a[fg:14]g[fg:14]e[fg:14]d[fg:14] [fg:14]([fg:14]1[fg:14])[fg:14]
+        M[fg:11] a[fg:7].[fg:7]r[fg:7]s[fg:7]                             +[fg:10]1[fg:10]/[fg:7]-[fg:9]0[fg:9]
         ");
     }
 
@@ -409,11 +409,11 @@ mod tests {
         state.git.untracked_files = vec!["tmp.log".into()];
         insta::assert_snapshot!(render_styled(&mut state, 40, 6), @"
 
-        m[fg:255]a[fg:255]i[fg:255]n[fg:255]
-                                         1[fg:252] [fg:252]f[fg:252]i[fg:252]l[fg:252]e[fg:252]s[fg:252]
-        ─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]
-        U[fg:109]n[fg:109]t[fg:109]r[fg:109]a[fg:109]c[fg:109]k[fg:109]e[fg:109]d[fg:109] [fg:109]([fg:109]1[fg:109])[fg:109]
-        ?[fg:252] t[fg:252]m[fg:252]p[fg:252].[fg:252]l[fg:252]o[fg:252]g[fg:252]
+        m[fg:15]a[fg:15]i[fg:15]n[fg:15]
+                                         1[fg:7] [fg:7]f[fg:7]i[fg:7]l[fg:7]e[fg:7]s[fg:7]
+        ─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]
+        U[fg:14]n[fg:14]t[fg:14]r[fg:14]a[fg:14]c[fg:14]k[fg:14]e[fg:14]d[fg:14] [fg:14]([fg:14]1[fg:14])[fg:14]
+        ?[fg:7] t[fg:7]m[fg:7]p[fg:7].[fg:7]l[fg:7]o[fg:7]g[fg:7]
         ");
     }
 

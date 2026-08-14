@@ -13,25 +13,19 @@ impl ActivityEntry {
         // MCP tool names arrive as `mcp__<server>__<tool>`; their variable
         // suffixes would otherwise fall through to the gray fallback.
         if self.tool.starts_with("mcp__") {
-            return 183; // soft violet
+            return 5; // magenta
         }
         match self.tool.as_str() {
-            "Edit" | "Write" => 180,                  // soft yellow
-            "Bash" | "PowerShell" | "Monitor" => 114, // soft green (Bash-permission category)
-            "Read" | "Glob" | "Grep" => 110,          // soft blue
-            "Agent" => 181,                           // soft pink
-            "WebFetch" | "WebSearch" => 117,          // soft cyan
-            "Skill" => 218,                           // soft magenta
-            "TaskCreate" | "TaskUpdate" | "TaskGet" | "TaskList" | "TaskStop" | "TaskOutput" => 223, // soft gold
-            "SendMessage" | "TeamCreate" | "TeamDelete" => 182, // soft lavender
-            "LSP" => 146,                                       // soft teal
-            "NotebookEdit" => 180,                              // soft yellow (like Edit)
-            "AskUserQuestion" | "PushNotification" => 216,      // soft orange (attention)
-            "CronCreate" | "CronDelete" | "CronList" | "RemoteTrigger" => 151, // soft mint
-            "EnterPlanMode" | "ExitPlanMode" => 189,            // soft periwinkle
-            "EnterWorktree" | "ExitWorktree" => 179,            // soft bronze
-            "ToolSearch" => 250,                                // light gray
-            _ => 244,
+            "Edit" | "Write" | "NotebookEdit" => 11, // yellow
+            "Bash" | "PowerShell" | "Monitor" | "CronCreate" | "CronDelete" | "CronList"
+            | "RemoteTrigger" => 10, // green
+            "Read" | "Glob" | "Grep" => 12,          // blue
+            "Agent" | "Skill" | "SendMessage" | "TeamCreate" | "TeamDelete" => 13, // magenta
+            "WebFetch" | "WebSearch" | "LSP" | "EnterPlanMode" | "ExitPlanMode" => 14, // cyan
+            "TaskCreate" | "TaskUpdate" | "TaskGet" | "TaskList" | "TaskStop" | "TaskOutput"
+            | "AskUserQuestion" | "PushNotification" | "EnterWorktree" | "ExitWorktree" => 11, // yellow
+            "ToolSearch" => 7, // light gray
+            _ => 8,            // dark gray
         }
     }
 }
@@ -58,6 +52,9 @@ fn parse_entry(line: &str) -> Option<ActivityEntry> {
     let mut parts = line.splitn(3, '|');
     let timestamp = parts.next()?.to_string();
     let tool = parts.next()?.to_string();
+    if tool.is_empty() || tool == "NO_TOOL_CALL" {
+        return None;
+    }
     let label = parts.next().unwrap_or("").to_string();
     Some(ActivityEntry {
         timestamp,
@@ -240,63 +237,63 @@ mod tests {
             tool: "Edit".into(),
             label: "test".into(),
         };
-        assert_eq!(entry.tool_color_index(), 180);
+        assert_eq!(entry.tool_color_index(), 11);
 
         let entry = ActivityEntry {
             timestamp: "10:00".into(),
             tool: "Bash".into(),
             label: "test".into(),
         };
-        assert_eq!(entry.tool_color_index(), 114);
+        assert_eq!(entry.tool_color_index(), 10);
 
         let entry = ActivityEntry {
             timestamp: "10:00".into(),
             tool: "WebFetch".into(),
             label: "example.com".into(),
         };
-        assert_eq!(entry.tool_color_index(), 117);
+        assert_eq!(entry.tool_color_index(), 14);
 
         let entry = ActivityEntry {
             timestamp: "10:00".into(),
             tool: "WebSearch".into(),
             label: "rust tutorial".into(),
         };
-        assert_eq!(entry.tool_color_index(), 117);
+        assert_eq!(entry.tool_color_index(), 14);
 
         let entry = ActivityEntry {
             timestamp: "10:00".into(),
             tool: "ToolSearch".into(),
             label: "".into(),
         };
-        assert_eq!(entry.tool_color_index(), 250);
+        assert_eq!(entry.tool_color_index(), 7);
 
         let entry = ActivityEntry {
             timestamp: "10:00".into(),
             tool: "PowerShell".into(),
             label: "Get-Process".into(),
         };
-        assert_eq!(entry.tool_color_index(), 114);
+        assert_eq!(entry.tool_color_index(), 10);
 
         let entry = ActivityEntry {
             timestamp: "10:00".into(),
             tool: "Monitor".into(),
             label: "tail -f server.log".into(),
         };
-        assert_eq!(entry.tool_color_index(), 114);
+        assert_eq!(entry.tool_color_index(), 10);
 
         let entry = ActivityEntry {
             timestamp: "10:00".into(),
             tool: "PushNotification".into(),
             label: "Deploy complete".into(),
         };
-        assert_eq!(entry.tool_color_index(), 216);
+        assert_eq!(entry.tool_color_index(), 11);
 
         let entry = ActivityEntry {
             timestamp: "10:00".into(),
             tool: "UnknownTool".into(),
             label: "".into(),
         };
-        assert_eq!(entry.tool_color_index(), 244);
+        assert_eq!(entry.tool_color_index(), 8);
 
         // Any `mcp__<server>__<tool>` name gets the MCP category color
         // instead of falling through to the gray default.
@@ -305,14 +302,23 @@ mod tests {
             tool: "mcp__context7__query-docs".into(),
             label: "".into(),
         };
-        assert_eq!(entry.tool_color_index(), 183);
+        assert_eq!(entry.tool_color_index(), 5);
 
         let entry = ActivityEntry {
             timestamp: "10:00".into(),
             tool: "mcp__chrome-devtools__navigate_page".into(),
             label: "".into(),
         };
-        assert_eq!(entry.tool_color_index(), 183);
+        assert_eq!(entry.tool_color_index(), 5);
+    }
+
+    #[test]
+    fn test_parse_entry_ignores_no_tool_call() {
+        assert!(parse_entry("10:00|NO_TOOL_CALL|").is_none());
+        assert!(parse_entry("10:00||").is_none());
+        let valid = parse_entry("10:00|Read|foo.rs").unwrap();
+        assert_eq!(valid.tool, "Read");
+        assert_eq!(valid.label, "foo.rs");
     }
 
     #[test]

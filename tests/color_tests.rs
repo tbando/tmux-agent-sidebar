@@ -15,45 +15,47 @@ fn test_all_color_theme_defaults() {
     let theme = ColorTheme::default();
 
     // Core UI colors
-    assert_eq!(theme.accent, Color::Indexed(153));
-    assert_eq!(theme.border_inactive, Color::Indexed(240));
-    assert_eq!(theme.selection_bg, Color::Indexed(239));
+    assert_eq!(theme.accent, Color::Indexed(14));
+    assert_eq!(theme.border_inactive, Color::Indexed(8));
+    assert_eq!(theme.selection_bg, Color::Indexed(8));
 
     // Status colors
-    assert_eq!(theme.status_all, Color::Indexed(111));
-    assert_eq!(theme.status_running, Color::Indexed(114));
-    assert_eq!(theme.status_waiting, Color::Indexed(221));
-    assert_eq!(theme.status_idle, Color::Indexed(110));
-    assert_eq!(theme.status_error, Color::Indexed(167));
-    assert_eq!(theme.status_unknown, Color::Indexed(244));
+    assert_eq!(theme.status_all, Color::Indexed(12));
+    assert_eq!(theme.status_running, Color::Indexed(10));
+    assert_eq!(theme.status_waiting, Color::Indexed(11));
+    assert_eq!(theme.status_idle, Color::Indexed(14));
+    assert_eq!(theme.status_error, Color::Indexed(9));
+    assert_eq!(theme.status_unknown, Color::Indexed(8));
 
     // Agent colors
-    assert_eq!(theme.agent_claude, Color::Indexed(174));
-    assert_eq!(theme.agent_codex, Color::Indexed(141));
-    assert_eq!(theme.pet_body, Color::Indexed(208));
-    assert_eq!(theme.pet_eye, Color::Indexed(114));
+    assert_eq!(theme.agent_claude, Color::Indexed(13));
+    assert_eq!(theme.agent_codex, Color::Indexed(5));
+    assert_eq!(theme.agent_opencode, Color::Indexed(6));
+    assert_eq!(theme.agent_antigravity, Color::Indexed(12));
+    assert_eq!(theme.pet_body, Color::Indexed(11));
+    assert_eq!(theme.pet_eye, Color::Indexed(10));
 
     // Text colors
-    assert_eq!(theme.text_active, Color::Indexed(255));
-    assert_eq!(theme.text_muted, Color::Indexed(252));
-    assert_eq!(theme.text_inactive, Color::Indexed(244));
+    assert_eq!(theme.text_active, Color::Indexed(15));
+    assert_eq!(theme.text_muted, Color::Indexed(7));
+    assert_eq!(theme.text_inactive, Color::Indexed(8));
 
     // Header/UI element colors
-    assert_eq!(theme.session_header, Color::Indexed(39));
-    assert_eq!(theme.port, Color::Indexed(246));
-    assert_eq!(theme.wait_reason, Color::Indexed(221));
-    assert_eq!(theme.branch, Color::Indexed(109));
+    assert_eq!(theme.session_header, Color::Indexed(12));
+    assert_eq!(theme.port, Color::Indexed(8));
+    assert_eq!(theme.wait_reason, Color::Indexed(11));
+    assert_eq!(theme.branch, Color::Indexed(6));
 
     // New theme fields
-    assert_eq!(theme.badge_danger, Color::Indexed(167));
-    assert_eq!(theme.badge_auto, Color::Indexed(221));
-    assert_eq!(theme.task_progress, Color::Indexed(223));
-    assert_eq!(theme.subagent, Color::Indexed(73));
-    assert_eq!(theme.commit_hash, Color::Indexed(221));
-    assert_eq!(theme.diff_added, Color::Indexed(114));
-    assert_eq!(theme.diff_deleted, Color::Indexed(174));
-    assert_eq!(theme.file_change, Color::Indexed(221));
-    assert_eq!(theme.pr_link, Color::Indexed(117));
+    assert_eq!(theme.badge_danger, Color::Indexed(9));
+    assert_eq!(theme.badge_auto, Color::Indexed(11));
+    assert_eq!(theme.task_progress, Color::Indexed(11));
+    assert_eq!(theme.subagent, Color::Indexed(6));
+    assert_eq!(theme.commit_hash, Color::Indexed(11));
+    assert_eq!(theme.diff_added, Color::Indexed(10));
+    assert_eq!(theme.diff_deleted, Color::Indexed(9));
+    assert_eq!(theme.file_change, Color::Indexed(11));
+    assert_eq!(theme.pr_link, Color::Indexed(14));
 }
 
 // ─── status_color() for all PaneStatus variants ─────────────────────
@@ -64,23 +66,23 @@ fn test_status_color_all_variants() {
 
     assert_eq!(
         theme.status_color(&PaneStatus::Running, false),
-        Color::Indexed(114)
+        Color::Indexed(10)
     );
     assert_eq!(
         theme.status_color(&PaneStatus::Waiting, false),
-        Color::Indexed(221)
+        Color::Indexed(11)
     );
     assert_eq!(
         theme.status_color(&PaneStatus::Idle, false),
-        Color::Indexed(110)
+        Color::Indexed(14)
     );
     assert_eq!(
         theme.status_color(&PaneStatus::Error, false),
-        Color::Indexed(167)
+        Color::Indexed(9)
     );
     assert_eq!(
         theme.status_color(&PaneStatus::Unknown, false),
-        Color::Indexed(244)
+        Color::Indexed(8)
     );
 }
 
@@ -111,8 +113,13 @@ fn test_status_color_attention_overrides_all() {
 fn test_agent_color_all_variants() {
     let theme = ColorTheme::default();
 
-    assert_eq!(theme.agent_color(&AgentType::Claude), Color::Indexed(174));
-    assert_eq!(theme.agent_color(&AgentType::Codex), Color::Indexed(141));
+    assert_eq!(theme.agent_color(&AgentType::Claude), Color::Indexed(13));
+    assert_eq!(theme.agent_color(&AgentType::Codex), Color::Indexed(5));
+    assert_eq!(theme.agent_color(&AgentType::OpenCode), Color::Indexed(6));
+    assert_eq!(
+        theme.agent_color(&AgentType::Antigravity),
+        Color::Indexed(12)
+    );
     assert_eq!(theme.agent_color(&AgentType::Unknown), theme.status_unknown);
 }
 
@@ -140,32 +147,32 @@ fn test_permission_mode_bypass_all_renders_danger_color() {
     // Styled snapshot locks in the BypassAll `!` badge rendered with
     // badge_danger (fg:167).
     insta::assert_snapshot!(render_to_styled_string(&mut state, 28, 26), @"
-     ≡[fg:111] 1[fg:255]  ●[fg:245] 1[fg:255]  ◎[fg:245] 0[fg:245]  ◐[fg:245] 0[fg:245]  ○[fg:245] 0[fg:245]  ✕[fg:245]
-    ⓘ[fg:221]                        —[fg:252] ▾[fg:252]
-    p[fg:153]r[fg:153]o[fg:153]j[fg:153]e[fg:153]c[fg:153]t[fg:153]
-    ┃[fg:153] ●[fg:82] [fg:174]c[fg:174]l[fg:174]a[fg:174]u[fg:174]d[fg:174]e[fg:174] [fg:167]![fg:167]
+     ≡[fg:12] 1[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 0[fg:8]  ✕[fg:8]
+    ⓘ[fg:11]                        —[fg:7] ▾[fg:7]
+    p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]
+    ┃[fg:14] ●[fg:82] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13] [fg:9]![fg:9]
 
 
-    ╭[fg:240] [fg:240]A[fg:153]c[fg:153]t[fg:153]i[fg:153]v[fg:153]i[fg:153]t[fg:153]y[fg:153] [fg:240]│[fg:240] [fg:240]G[fg:252]i[fg:252]t[fg:252] [fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]╮[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]N[fg:252]o[fg:252] [fg:252]a[fg:252]c[fg:252]t[fg:252]i[fg:252]v[fg:252]i[fg:252]t[fg:252]y[fg:252] [fg:252]y[fg:252]e[fg:252]t[fg:252] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    ╰[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]╯[fg:240]
+    ╭[fg:8] [fg:8]A[fg:14]c[fg:14]t[fg:14]i[fg:14]v[fg:14]i[fg:14]t[fg:14]y[fg:14] [fg:8]│[fg:8] [fg:8]G[fg:7]i[fg:7]t[fg:7] [fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]╮[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]N[fg:7]o[fg:7] [fg:7]a[fg:7]c[fg:7]t[fg:7]i[fg:7]v[fg:7]i[fg:7]t[fg:7]y[fg:7] [fg:7]y[fg:7]e[fg:7]t[fg:7] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    ╰[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]╯[fg:8]
     ");
 }
 
@@ -191,32 +198,32 @@ fn test_permission_mode_full_auto_renders_auto_color() {
     // Styled snapshot locks in the Auto `auto` badge rendered with
     // badge_auto (fg:221).
     insta::assert_snapshot!(render_to_styled_string(&mut state, 28, 26), @"
-     ≡[fg:111] 1[fg:255]  ●[fg:245] 1[fg:255]  ◎[fg:245] 0[fg:245]  ◐[fg:245] 0[fg:245]  ○[fg:245] 0[fg:245]  ✕[fg:245]
-    ⓘ[fg:221]                        —[fg:252] ▾[fg:252]
-    p[fg:153]r[fg:153]o[fg:153]j[fg:153]e[fg:153]c[fg:153]t[fg:153]
-    ┃[fg:153] ●[fg:82] [fg:174]c[fg:174]l[fg:174]a[fg:174]u[fg:174]d[fg:174]e[fg:174] [fg:221]a[fg:221]u[fg:221]t[fg:221]o[fg:221]
+     ≡[fg:12] 1[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 0[fg:8]  ✕[fg:8]
+    ⓘ[fg:11]                        —[fg:7] ▾[fg:7]
+    p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]
+    ┃[fg:14] ●[fg:82] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13] [fg:11]a[fg:11]u[fg:11]t[fg:11]o[fg:11]
 
 
-    ╭[fg:240] [fg:240]A[fg:153]c[fg:153]t[fg:153]i[fg:153]v[fg:153]i[fg:153]t[fg:153]y[fg:153] [fg:240]│[fg:240] [fg:240]G[fg:252]i[fg:252]t[fg:252] [fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]╮[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]N[fg:252]o[fg:252] [fg:252]a[fg:252]c[fg:252]t[fg:252]i[fg:252]v[fg:252]i[fg:252]t[fg:252]y[fg:252] [fg:252]y[fg:252]e[fg:252]t[fg:252] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    ╰[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]╯[fg:240]
+    ╭[fg:8] [fg:8]A[fg:14]c[fg:14]t[fg:14]i[fg:14]v[fg:14]i[fg:14]t[fg:14]y[fg:14] [fg:8]│[fg:8] [fg:8]G[fg:7]i[fg:7]t[fg:7] [fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]╮[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]N[fg:7]o[fg:7] [fg:7]a[fg:7]c[fg:7]t[fg:7]i[fg:7]v[fg:7]i[fg:7]t[fg:7]y[fg:7] [fg:7]y[fg:7]e[fg:7]t[fg:7] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    ╰[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]╯[fg:8]
     ");
 }
 
@@ -256,15 +263,15 @@ fn test_permission_mode_normal_no_badge() {
 #[test]
 fn test_tool_color_all_branches() {
     let cases = vec![
-        ("Edit", 180),
-        ("Write", 180),
-        ("Bash", 114),
-        ("Read", 110),
-        ("Glob", 110),
-        ("Grep", 110),
-        ("Agent", 181),
-        ("UnknownTool", 244),
-        ("", 244),
+        ("Edit", 11),
+        ("Write", 11),
+        ("Bash", 10),
+        ("Read", 12),
+        ("Glob", 12),
+        ("Grep", 12),
+        ("Agent", 13),
+        ("UnknownTool", 8),
+        ("", 8),
     ];
     for (tool, expected) in cases {
         let entry = ActivityEntry {
@@ -314,31 +321,31 @@ fn test_git_summary_modified_uses_badge_auto_color() {
     // Styled snapshot locks in the Modified file badge color
     // (badge_auto fg:221).
     insta::assert_snapshot!(render_to_styled_string(&mut state, 28, 25), @"
-     ≡[fg:111] 1[fg:255]  ●[fg:245] 1[fg:255]  ◎[fg:245] 0[fg:245]  ◐[fg:245] 0[fg:245]  ○[fg:245] 0[fg:245]  ✕[fg:245]
-    ⓘ[fg:221]                        —[fg:252] ▾[fg:252]
-    p[fg:153]r[fg:153]o[fg:153]j[fg:153]e[fg:153]c[fg:153]t[fg:153]
-    ┃[fg:153] ●[fg:82] [fg:174]c[fg:174]l[fg:174]a[fg:174]u[fg:174]d[fg:174]e[fg:174]
+     ≡[fg:12] 1[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 0[fg:8]  ✕[fg:8]
+    ⓘ[fg:11]                        —[fg:7] ▾[fg:7]
+    p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]
+    ┃[fg:14] ●[fg:82] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
 
-    ╭[fg:153] [fg:153]A[fg:252]c[fg:252]t[fg:252]i[fg:252]v[fg:252]i[fg:252]t[fg:252]y[fg:252] [fg:240]│[fg:240] [fg:240]G[fg:153]i[fg:153]t[fg:153] [fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]╮[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153]m[fg:255]a[fg:255]i[fg:255]n[fg:255] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]1[fg:252] [fg:252]f[fg:252]i[fg:252]l[fg:252]e[fg:252]s[fg:252]│[fg:153]
-    │[fg:153]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]│[fg:153]
-    │[fg:153]U[fg:109]n[fg:109]s[fg:109]t[fg:109]a[fg:109]g[fg:109]e[fg:109]d[fg:109] [fg:109]([fg:109]1[fg:109])[fg:109] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153]M[fg:221] [fg:153]s[fg:252]r[fg:252]c[fg:252]/[fg:252]l[fg:252]i[fg:252]b[fg:252].[fg:252]r[fg:252]s[fg:252] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]+[fg:114]5[fg:114]/[fg:252]-[fg:174]2[fg:174]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    ╰[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]╯[fg:153]
+    ╭[fg:14] [fg:14]A[fg:7]c[fg:7]t[fg:7]i[fg:7]v[fg:7]i[fg:7]t[fg:7]y[fg:7] [fg:8]│[fg:8] [fg:8]G[fg:14]i[fg:14]t[fg:14] [fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]╮[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14]m[fg:15]a[fg:15]i[fg:15]n[fg:15] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]1[fg:7] [fg:7]f[fg:7]i[fg:7]l[fg:7]e[fg:7]s[fg:7]│[fg:14]
+    │[fg:14]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]│[fg:14]
+    │[fg:14]U[fg:14]n[fg:14]s[fg:14]t[fg:14]a[fg:14]g[fg:14]e[fg:14]d[fg:14] [fg:14]([fg:14]1[fg:14])[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14]M[fg:11] [fg:14]s[fg:7]r[fg:7]c[fg:7]/[fg:7]l[fg:7]i[fg:7]b[fg:7].[fg:7]r[fg:7]s[fg:7] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]+[fg:10]5[fg:10]/[fg:7]-[fg:9]2[fg:9]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    ╰[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]╯[fg:14]
     ");
 }
 
@@ -376,11 +383,11 @@ fn test_task_progress_line_uses_task_progress_color() {
     // Styled snapshot locks in both the task_progress color (fg:223) and
     // the progress glyphs (✔/◼/◻) with the "1/3" count.
     insta::assert_snapshot!(render_to_styled_string(&mut state, 40, 40), @"
-     ≡[fg:111] 1[fg:255]  ●[fg:245] 1[fg:255]  ◎[fg:245] 0[fg:245]  ◐[fg:245] 0[fg:245]  ○[fg:245] 0[fg:245]  ✕[fg:245] 0[fg:245]
-    ⓘ[fg:221]                                    —[fg:252] ▾[fg:252]
-    p[fg:153]r[fg:153]o[fg:153]j[fg:153]e[fg:153]c[fg:153]t[fg:153]
-    ┃[fg:153] ●[fg:82] [fg:174]c[fg:174]l[fg:174]a[fg:174]u[fg:174]d[fg:174]e[fg:174]
-       [fg:223] [fg:223]✔[fg:223]◼[fg:223]◻[fg:223] [fg:223]1[fg:223]/[fg:223]3[fg:223]
+     ≡[fg:12] 1[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 0[fg:8]  ✕[fg:8] 0[fg:8]
+    ⓘ[fg:11]                                    —[fg:7] ▾[fg:7]
+    p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]
+    ┃[fg:14] ●[fg:82] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
+       [fg:11] [fg:11]✔[fg:11]◼[fg:11]◻[fg:11] [fg:11]1[fg:11]/[fg:11]3[fg:11]
 
 
 
@@ -396,26 +403,26 @@ fn test_task_progress_line_uses_task_progress_color() {
 
 
 
-    ╭[fg:240] [fg:240]A[fg:153]c[fg:153]t[fg:153]i[fg:153]v[fg:153]i[fg:153]t[fg:153]y[fg:153] [fg:240]│[fg:240] [fg:240]G[fg:252]i[fg:252]t[fg:252] [fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]╮[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]N[fg:252]o[fg:252] [fg:252]a[fg:252]c[fg:252]t[fg:252]i[fg:252]v[fg:252]i[fg:252]t[fg:252]y[fg:252] [fg:252]y[fg:252]e[fg:252]t[fg:252] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    ╰[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]╯[fg:240]
+    ╭[fg:8] [fg:8]A[fg:14]c[fg:14]t[fg:14]i[fg:14]v[fg:14]i[fg:14]t[fg:14]y[fg:14] [fg:8]│[fg:8] [fg:8]G[fg:7]i[fg:7]t[fg:7] [fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]╮[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]N[fg:7]o[fg:7] [fg:7]a[fg:7]c[fg:7]t[fg:7]i[fg:7]v[fg:7]i[fg:7]t[fg:7]y[fg:7] [fg:7]y[fg:7]e[fg:7]t[fg:7] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    ╰[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]╯[fg:8]
     ");
 }
 
@@ -441,33 +448,33 @@ fn test_subagent_line_uses_subagent_color() {
     // Styled snapshot locks in the subagent line color (fg:73) plus the
     // rendered "Explore #1" label.
     insta::assert_snapshot!(render_to_styled_string(&mut state, 40, 27), @"
-     ≡[fg:111] 1[fg:255]  ●[fg:245] 1[fg:255]  ◎[fg:245] 0[fg:245]  ◐[fg:245] 0[fg:245]  ○[fg:245] 0[fg:245]  ✕[fg:245] 0[fg:245]
-    ⓘ[fg:221]                                    —[fg:252] ▾[fg:252]
-    p[fg:153]r[fg:153]o[fg:153]j[fg:153]e[fg:153]c[fg:153]t[fg:153]
-    ┃[fg:153] ●[fg:82] [fg:174]c[fg:174]l[fg:174]a[fg:174]u[fg:174]d[fg:174]e[fg:174]
-       [fg:252] [fg:252]└[fg:252] [fg:252]E[fg:73]x[fg:73]p[fg:73]l[fg:73]o[fg:73]r[fg:73]e[fg:73] [fg:73]#[fg:73]1[fg:73]
+     ≡[fg:12] 1[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 0[fg:8]  ✕[fg:8] 0[fg:8]
+    ⓘ[fg:11]                                    —[fg:7] ▾[fg:7]
+    p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]
+    ┃[fg:14] ●[fg:82] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
+       [fg:7] [fg:7]└[fg:7] [fg:7]E[fg:6]x[fg:6]p[fg:6]l[fg:6]o[fg:6]r[fg:6]e[fg:6] [fg:6]#[fg:6]1[fg:6]
 
 
-    ╭[fg:240] [fg:240]A[fg:153]c[fg:153]t[fg:153]i[fg:153]v[fg:153]i[fg:153]t[fg:153]y[fg:153] [fg:240]│[fg:240] [fg:240]G[fg:252]i[fg:252]t[fg:252] [fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]╮[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]N[fg:252]o[fg:252] [fg:252]a[fg:252]c[fg:252]t[fg:252]i[fg:252]v[fg:252]i[fg:252]t[fg:252]y[fg:252] [fg:252]y[fg:252]e[fg:252]t[fg:252] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    ╰[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]╯[fg:240]
+    ╭[fg:8] [fg:8]A[fg:14]c[fg:14]t[fg:14]i[fg:14]v[fg:14]i[fg:14]t[fg:14]y[fg:14] [fg:8]│[fg:8] [fg:8]G[fg:7]i[fg:7]t[fg:7] [fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]╮[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]N[fg:7]o[fg:7] [fg:7]a[fg:7]c[fg:7]t[fg:7]i[fg:7]v[fg:7]i[fg:7]t[fg:7]y[fg:7] [fg:7]y[fg:7]e[fg:7]t[fg:7] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    ╰[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]╯[fg:8]
     ");
 }
 
@@ -496,33 +503,33 @@ fn test_response_arrow_uses_response_arrow_color() {
     //   • response_arrow color (fg:81) + bold on the ▷ glyph
     //   • text_active color (fg:255) on the focused response text
     insta::assert_snapshot!(render_to_styled_string(&mut state, 40, 27), @"
-     ≡[fg:111] 1[fg:255]  ●[fg:245] 0[fg:245]  ◎[fg:245] 0[fg:245]  ◐[fg:245] 0[fg:245]  ○[fg:245] 1[fg:255]  ✕[fg:245] 0[fg:245]
-    ⓘ[fg:221]                                    —[fg:252] ▾[fg:252]
-    p[fg:153]r[fg:153]o[fg:153]j[fg:153]e[fg:153]c[fg:153]t[fg:153]
-    ┃[fg:153] ○[fg:110] [fg:174]c[fg:174]l[fg:174]a[fg:174]u[fg:174]d[fg:174]e[fg:174]
-      ▷[fg:81,bold] [fg:81,bold]T[fg:255]a[fg:255]s[fg:255]k[fg:255] [fg:255]c[fg:255]o[fg:255]m[fg:255]p[fg:255]l[fg:255]e[fg:255]t[fg:255]e[fg:255]d[fg:255] [fg:255]s[fg:255]u[fg:255]c[fg:255]c[fg:255]e[fg:255]s[fg:255]s[fg:255]f[fg:255]u[fg:255]l[fg:255]l[fg:255]y[fg:255]
+     ≡[fg:12] 1[fg:15]  ●[fg:8] 0[fg:8]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 1[fg:15]  ✕[fg:8] 0[fg:8]
+    ⓘ[fg:11]                                    —[fg:7] ▾[fg:7]
+    p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]
+    ┃[fg:14] ○[fg:14] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
+      ▷[fg:14,bold] [fg:14,bold]T[fg:15]a[fg:15]s[fg:15]k[fg:15] [fg:15]c[fg:15]o[fg:15]m[fg:15]p[fg:15]l[fg:15]e[fg:15]t[fg:15]e[fg:15]d[fg:15] [fg:15]s[fg:15]u[fg:15]c[fg:15]c[fg:15]e[fg:15]s[fg:15]s[fg:15]f[fg:15]u[fg:15]l[fg:15]l[fg:15]y[fg:15]
 
 
-    ╭[fg:240] [fg:240]A[fg:153]c[fg:153]t[fg:153]i[fg:153]v[fg:153]i[fg:153]t[fg:153]y[fg:153] [fg:240]│[fg:240] [fg:240]G[fg:252]i[fg:252]t[fg:252] [fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]╮[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]N[fg:252]o[fg:252] [fg:252]a[fg:252]c[fg:252]t[fg:252]i[fg:252]v[fg:252]i[fg:252]t[fg:252]y[fg:252] [fg:252]y[fg:252]e[fg:252]t[fg:252] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    ╰[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]╯[fg:240]
+    ╭[fg:8] [fg:8]A[fg:14]c[fg:14]t[fg:14]i[fg:14]v[fg:14]i[fg:14]t[fg:14]y[fg:14] [fg:8]│[fg:8] [fg:8]G[fg:7]i[fg:7]t[fg:7] [fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]╮[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]N[fg:7]o[fg:7] [fg:7]a[fg:7]c[fg:7]t[fg:7]i[fg:7]v[fg:7]i[fg:7]t[fg:7]y[fg:7] [fg:7]y[fg:7]e[fg:7]t[fg:7] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    ╰[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]╯[fg:8]
     ");
 }
 
@@ -555,10 +562,10 @@ fn test_pr_link_uses_pr_link_color() {
     // Styled snapshot locks in the PR link: pr_link color (fg:117) plus
     // the underline modifier on the `#99` glyphs.
     insta::assert_snapshot!(render_to_styled_string(&mut state, 28, 40), @"
-     ≡[fg:111] 1[fg:255]  ●[fg:245] 1[fg:255]  ◎[fg:245] 0[fg:245]  ◐[fg:245] 0[fg:245]  ○[fg:245] 0[fg:245]  ✕[fg:245]
-    ⓘ[fg:221]                        —[fg:252] ▾[fg:252]
-    p[fg:153]r[fg:153]o[fg:153]j[fg:153]e[fg:153]c[fg:153]t[fg:153]
-    ┃[fg:153] ●[fg:82] [fg:174]c[fg:174]l[fg:174]a[fg:174]u[fg:174]d[fg:174]e[fg:174]
+     ≡[fg:12] 1[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 0[fg:8]  ✕[fg:8]
+    ⓘ[fg:11]                        —[fg:7] ▾[fg:7]
+    p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]
+    ┃[fg:14] ●[fg:82] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
 
 
 
@@ -575,26 +582,26 @@ fn test_pr_link_uses_pr_link_color() {
 
 
 
-    ╭[fg:153] [fg:153]A[fg:252]c[fg:252]t[fg:252]i[fg:252]v[fg:252]i[fg:252]t[fg:252]y[fg:252] [fg:240]│[fg:240] [fg:240]G[fg:153]i[fg:153]t[fg:153] [fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]╮[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153]f[fg:255]e[fg:255]a[fg:255]t[fg:255]u[fg:255]r[fg:255]e[fg:255]/[fg:255]t[fg:255]e[fg:255]s[fg:255]t[fg:255] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]#[fg:117,underline]9[fg:117,underline]9[fg:117,underline]│[fg:153]
-    │[fg:153]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153]W[fg:252]o[fg:252]r[fg:252]k[fg:252]i[fg:252]n[fg:252]g[fg:252] [fg:252]t[fg:252]r[fg:252]e[fg:252]e[fg:252] [fg:252]c[fg:252]l[fg:252]e[fg:252]a[fg:252]n[fg:252] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    ╰[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]╯[fg:153]
+    ╭[fg:14] [fg:14]A[fg:7]c[fg:7]t[fg:7]i[fg:7]v[fg:7]i[fg:7]t[fg:7]y[fg:7] [fg:8]│[fg:8] [fg:8]G[fg:14]i[fg:14]t[fg:14] [fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]╮[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14]f[fg:15]e[fg:15]a[fg:15]t[fg:15]u[fg:15]r[fg:15]e[fg:15]/[fg:15]t[fg:15]e[fg:15]s[fg:15]t[fg:15] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]#[fg:14,underline]9[fg:14,underline]9[fg:14,underline]│[fg:14]
+    │[fg:14]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14]W[fg:7]o[fg:7]r[fg:7]k[fg:7]i[fg:7]n[fg:7]g[fg:7] [fg:7]t[fg:7]r[fg:7]e[fg:7]e[fg:7] [fg:7]c[fg:7]l[fg:7]e[fg:7]a[fg:7]n[fg:7] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    ╰[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]╯[fg:14]
     ");
 }
 
@@ -623,10 +630,10 @@ fn test_diff_stat_added_uses_diff_added_color() {
     // Styled snapshot locks in the `+42` additions rendered with
     // diff_added color (fg:114).
     insta::assert_snapshot!(render_to_styled_string(&mut state, 28, 40), @"
-     ≡[fg:111] 1[fg:255]  ●[fg:245] 1[fg:255]  ◎[fg:245] 0[fg:245]  ◐[fg:245] 0[fg:245]  ○[fg:245] 0[fg:245]  ✕[fg:245]
-    ⓘ[fg:221]                        —[fg:252] ▾[fg:252]
-    p[fg:153]r[fg:153]o[fg:153]j[fg:153]e[fg:153]c[fg:153]t[fg:153]
-    ┃[fg:153] ●[fg:82] [fg:174]c[fg:174]l[fg:174]a[fg:174]u[fg:174]d[fg:174]e[fg:174]
+     ≡[fg:12] 1[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 0[fg:8]  ✕[fg:8]
+    ⓘ[fg:11]                        —[fg:7] ▾[fg:7]
+    p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]
+    ┃[fg:14] ●[fg:82] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
 
 
 
@@ -643,26 +650,26 @@ fn test_diff_stat_added_uses_diff_added_color() {
 
 
 
-    ╭[fg:153] [fg:153]A[fg:252]c[fg:252]t[fg:252]i[fg:252]v[fg:252]i[fg:252]t[fg:252]y[fg:252] [fg:240]│[fg:240] [fg:240]G[fg:153]i[fg:153]t[fg:153] [fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]╮[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153]m[fg:255]a[fg:255]i[fg:255]n[fg:255] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153]+[fg:114]4[fg:114]2[fg:114]/[fg:252]-[fg:174]1[fg:174]0[fg:174] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]0[fg:252] [fg:252]f[fg:252]i[fg:252]l[fg:252]e[fg:252]s[fg:252]│[fg:153]
-    │[fg:153]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153]W[fg:252]o[fg:252]r[fg:252]k[fg:252]i[fg:252]n[fg:252]g[fg:252] [fg:252]t[fg:252]r[fg:252]e[fg:252]e[fg:252] [fg:252]c[fg:252]l[fg:252]e[fg:252]a[fg:252]n[fg:252] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    ╰[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]╯[fg:153]
+    ╭[fg:14] [fg:14]A[fg:7]c[fg:7]t[fg:7]i[fg:7]v[fg:7]i[fg:7]t[fg:7]y[fg:7] [fg:8]│[fg:8] [fg:8]G[fg:14]i[fg:14]t[fg:14] [fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]╮[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14]m[fg:15]a[fg:15]i[fg:15]n[fg:15] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14]+[fg:10]4[fg:10]2[fg:10]/[fg:7]-[fg:9]1[fg:9]0[fg:9] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]0[fg:7] [fg:7]f[fg:7]i[fg:7]l[fg:7]e[fg:7]s[fg:7]│[fg:14]
+    │[fg:14]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14]W[fg:7]o[fg:7]r[fg:7]k[fg:7]i[fg:7]n[fg:7]g[fg:7] [fg:7]t[fg:7]r[fg:7]e[fg:7]e[fg:7] [fg:7]c[fg:7]l[fg:7]e[fg:7]a[fg:7]n[fg:7] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    ╰[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]╯[fg:14]
     ");
 }
 
@@ -691,31 +698,31 @@ fn test_diff_stat_deleted_uses_diff_deleted_color() {
     // Styled snapshot locks in the `-25` deletions rendered with
     // diff_deleted color (fg:174).
     insta::assert_snapshot!(render_to_styled_string(&mut state, 28, 25), @"
-     ≡[fg:111] 1[fg:255]  ●[fg:245] 1[fg:255]  ◎[fg:245] 0[fg:245]  ◐[fg:245] 0[fg:245]  ○[fg:245] 0[fg:245]  ✕[fg:245]
-    ⓘ[fg:221]                        —[fg:252] ▾[fg:252]
-    p[fg:153]r[fg:153]o[fg:153]j[fg:153]e[fg:153]c[fg:153]t[fg:153]
-    ┃[fg:153] ●[fg:82] [fg:174]c[fg:174]l[fg:174]a[fg:174]u[fg:174]d[fg:174]e[fg:174]
+     ≡[fg:12] 1[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 0[fg:8]  ✕[fg:8]
+    ⓘ[fg:11]                        —[fg:7] ▾[fg:7]
+    p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]
+    ┃[fg:14] ●[fg:82] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
 
-    ╭[fg:153] [fg:153]A[fg:252]c[fg:252]t[fg:252]i[fg:252]v[fg:252]i[fg:252]t[fg:252]y[fg:252] [fg:240]│[fg:240] [fg:240]G[fg:153]i[fg:153]t[fg:153] [fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]╮[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153]m[fg:255]a[fg:255]i[fg:255]n[fg:255] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153]+[fg:114]0[fg:114]/[fg:252]-[fg:174]2[fg:174]5[fg:174] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]0[fg:252] [fg:252]f[fg:252]i[fg:252]l[fg:252]e[fg:252]s[fg:252]│[fg:153]
-    │[fg:153]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153]W[fg:252]o[fg:252]r[fg:252]k[fg:252]i[fg:252]n[fg:252]g[fg:252] [fg:252]t[fg:252]r[fg:252]e[fg:252]e[fg:252] [fg:252]c[fg:252]l[fg:252]e[fg:252]a[fg:252]n[fg:252] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    ╰[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]╯[fg:153]
+    ╭[fg:14] [fg:14]A[fg:7]c[fg:7]t[fg:7]i[fg:7]v[fg:7]i[fg:7]t[fg:7]y[fg:7] [fg:8]│[fg:8] [fg:8]G[fg:14]i[fg:14]t[fg:14] [fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]╮[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14]m[fg:15]a[fg:15]i[fg:15]n[fg:15] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14]+[fg:10]0[fg:10]/[fg:7]-[fg:9]2[fg:9]5[fg:9] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]0[fg:7] [fg:7]f[fg:7]i[fg:7]l[fg:7]e[fg:7]s[fg:7]│[fg:14]
+    │[fg:14]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14]W[fg:7]o[fg:7]r[fg:7]k[fg:7]i[fg:7]n[fg:7]g[fg:7] [fg:7]t[fg:7]r[fg:7]e[fg:7]e[fg:7] [fg:7]c[fg:7]l[fg:7]e[fg:7]a[fg:7]n[fg:7] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    ╰[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]╯[fg:14]
     ");
 }
 
@@ -750,31 +757,31 @@ fn test_file_change_stat_uses_file_change_color() {
     // Styled snapshot locks in the `M lib.rs` row rendered with
     // badge_auto (fg:221) on the status glyph.
     insta::assert_snapshot!(render_to_styled_string(&mut state, 28, 25), @"
-     ≡[fg:111] 1[fg:255]  ●[fg:245] 1[fg:255]  ◎[fg:245] 0[fg:245]  ◐[fg:245] 0[fg:245]  ○[fg:245] 0[fg:245]  ✕[fg:245]
-    ⓘ[fg:221]                        —[fg:252] ▾[fg:252]
-    p[fg:153]r[fg:153]o[fg:153]j[fg:153]e[fg:153]c[fg:153]t[fg:153]
-    ┃[fg:153] ●[fg:82] [fg:174]c[fg:174]l[fg:174]a[fg:174]u[fg:174]d[fg:174]e[fg:174]
+     ≡[fg:12] 1[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 0[fg:8]  ✕[fg:8]
+    ⓘ[fg:11]                        —[fg:7] ▾[fg:7]
+    p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]
+    ┃[fg:14] ●[fg:82] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
 
-    ╭[fg:153] [fg:153]A[fg:252]c[fg:252]t[fg:252]i[fg:252]v[fg:252]i[fg:252]t[fg:252]y[fg:252] [fg:240]│[fg:240] [fg:240]G[fg:153]i[fg:153]t[fg:153] [fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]╮[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153]m[fg:255]a[fg:255]i[fg:255]n[fg:255] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]1[fg:252] [fg:252]f[fg:252]i[fg:252]l[fg:252]e[fg:252]s[fg:252]│[fg:153]
-    │[fg:153]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]│[fg:153]
-    │[fg:153]U[fg:109]n[fg:109]s[fg:109]t[fg:109]a[fg:109]g[fg:109]e[fg:109]d[fg:109] [fg:109]([fg:109]1[fg:109])[fg:109] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153]M[fg:221] [fg:153]l[fg:252]i[fg:252]b[fg:252].[fg:252]r[fg:252]s[fg:252] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]+[fg:114]4[fg:114]0[fg:114]/[fg:252]-[fg:174]1[fg:174]0[fg:174]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    │[fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153] [fg:153]│[fg:153]
-    ╰[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]─[fg:153]╯[fg:153]
+    ╭[fg:14] [fg:14]A[fg:7]c[fg:7]t[fg:7]i[fg:7]v[fg:7]i[fg:7]t[fg:7]y[fg:7] [fg:8]│[fg:8] [fg:8]G[fg:14]i[fg:14]t[fg:14] [fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]╮[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14]m[fg:15]a[fg:15]i[fg:15]n[fg:15] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]1[fg:7] [fg:7]f[fg:7]i[fg:7]l[fg:7]e[fg:7]s[fg:7]│[fg:14]
+    │[fg:14]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]│[fg:14]
+    │[fg:14]U[fg:14]n[fg:14]s[fg:14]t[fg:14]a[fg:14]g[fg:14]e[fg:14]d[fg:14] [fg:14]([fg:14]1[fg:14])[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14]M[fg:11] [fg:14]l[fg:7]i[fg:7]b[fg:7].[fg:7]r[fg:7]s[fg:7] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]+[fg:10]4[fg:10]0[fg:10]/[fg:7]-[fg:9]1[fg:9]0[fg:9]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
+    ╰[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]╯[fg:14]
     ");
 }
 
@@ -808,10 +815,10 @@ fn test_custom_theme_new_fields_override() {
     assert_eq!(theme.port, Color::Indexed(82));
 
     // Original fields should still be default
-    assert_eq!(theme.accent, Color::Indexed(153));
-    assert_eq!(theme.agent_claude, Color::Indexed(174));
-    assert_eq!(theme.pet_body, Color::Indexed(208));
-    assert_eq!(theme.pet_eye, Color::Indexed(114));
+    assert_eq!(theme.accent, Color::Indexed(14));
+    assert_eq!(theme.agent_claude, Color::Indexed(13));
+    assert_eq!(theme.pet_body, Color::Indexed(11));
+    assert_eq!(theme.pet_eye, Color::Indexed(10));
 }
 
 // ─── Branch color in styled output ──────────────────────────────────
@@ -850,11 +857,11 @@ fn test_branch_color_in_agent_panel() {
     // Styled snapshot locks in the branch name rendered with branch color
     // (fg:109).
     insta::assert_snapshot!(render_to_styled_string(&mut state, 40, 26), @"
-     ≡[fg:111] 1[fg:255]  ●[fg:245] 1[fg:255]  ◎[fg:245] 0[fg:245]  ◐[fg:245] 0[fg:245]  ○[fg:245] 0[fg:245]  ✕[fg:245] 0[fg:245]
-    ⓘ[fg:221]                                    —[fg:252] ▾[fg:252]
-    p[fg:153]r[fg:153]o[fg:153]j[fg:153]e[fg:153]c[fg:153]t[fg:153]                                +[fg:153]
-    ┃[fg:153] ●[fg:82] [fg:174]c[fg:174]l[fg:174]a[fg:174]u[fg:174]d[fg:174]e[fg:174]
-    ┃[fg:153]  [fg:109] [fg:109]f[fg:109]e[fg:109]a[fg:109]t[fg:109]u[fg:109]r[fg:109]e[fg:109]/[fg:109]c[fg:109]o[fg:109]o[fg:109]l[fg:109]-[fg:109]f[fg:109]e[fg:109]a[fg:109]t[fg:109]u[fg:109]r[fg:109]e[fg:109]
+     ≡[fg:12] 1[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 0[fg:8]  ✕[fg:8] 0[fg:8]
+    ⓘ[fg:11]                                    —[fg:7] ▾[fg:7]
+    p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]                                +[fg:14]
+    ┃[fg:14] ●[fg:82] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
+    ┃[fg:14]  [fg:6] [fg:6]f[fg:6]e[fg:6]a[fg:6]t[fg:6]u[fg:6]r[fg:6]e[fg:6]/[fg:6]c[fg:6]o[fg:6]o[fg:6]l[fg:6]-[fg:6]f[fg:6]e[fg:6]a[fg:6]t[fg:6]u[fg:6]r[fg:6]e[fg:6]
     ");
 }
 
@@ -881,31 +888,31 @@ fn test_selection_bg_color_applied() {
     // Styled snapshot locks in the selected agent row's selection
     // background (bg:239).
     insta::assert_snapshot!(render_to_styled_string(&mut state, 28, 25), @"
-     ≡[fg:111] 1[fg:255]  ●[fg:245] 0[fg:245]  ◎[fg:245] 0[fg:245]  ◐[fg:245] 0[fg:245]  ○[fg:245] 1[fg:255]  ✕[fg:245]
-    ⓘ[fg:221]                        —[fg:252] ▾[fg:252]
-    ┃[fg:153,bg:239] [bg:239]○[fg:110,bg:239] [fg:174,bg:239]c[fg:174,bg:239]l[fg:174,bg:239]a[fg:174,bg:239]u[fg:174,bg:239]d[fg:174,bg:239]e[fg:174,bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239]
-       [fg:255] [fg:255]W[fg:255]a[fg:255]i[fg:255]t[fg:255]i[fg:255]n[fg:255]g[fg:255] [fg:255]f[fg:255]o[fg:255]r[fg:255] [fg:255]p[fg:255]r[fg:255]o[fg:255]m[fg:255]p[fg:255]t[fg:255]…[fg:255]
+     ≡[fg:12] 1[fg:15]  ●[fg:8] 0[fg:8]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 1[fg:15]  ✕[fg:8]
+    ⓘ[fg:11]                        —[fg:7] ▾[fg:7]
+    ┃[fg:14,bg:8] [bg:8]○[fg:14,bg:8] [fg:13,bg:8]c[fg:13,bg:8]l[fg:13,bg:8]a[fg:13,bg:8]u[fg:13,bg:8]d[fg:13,bg:8]e[fg:13,bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8]
+       [fg:15] [fg:15]W[fg:15]a[fg:15]i[fg:15]t[fg:15]i[fg:15]n[fg:15]g[fg:15] [fg:15]f[fg:15]o[fg:15]r[fg:15] [fg:15]p[fg:15]r[fg:15]o[fg:15]m[fg:15]p[fg:15]t[fg:15]…[fg:15]
 
-    ╭[fg:240] [fg:240]A[fg:153]c[fg:153]t[fg:153]i[fg:153]v[fg:153]i[fg:153]t[fg:153]y[fg:153] [fg:240]│[fg:240] [fg:240]G[fg:252]i[fg:252]t[fg:252] [fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]╮[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]N[fg:252]o[fg:252] [fg:252]a[fg:252]c[fg:252]t[fg:252]i[fg:252]v[fg:252]i[fg:252]t[fg:252]y[fg:252] [fg:252]y[fg:252]e[fg:252]t[fg:252] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    ╰[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]╯[fg:240]
+    ╭[fg:8] [fg:8]A[fg:14]c[fg:14]t[fg:14]i[fg:14]v[fg:14]i[fg:14]t[fg:14]y[fg:14] [fg:8]│[fg:8] [fg:8]G[fg:7]i[fg:7]t[fg:7] [fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]╮[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]N[fg:7]o[fg:7] [fg:7]a[fg:7]c[fg:7]t[fg:7]i[fg:7]v[fg:7]i[fg:7]t[fg:7]y[fg:7] [fg:7]y[fg:7]e[fg:7]t[fg:7] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    ╰[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]╯[fg:8]
     ");
 }
 
@@ -947,36 +954,36 @@ fn test_accent_vs_border_inactive_colors() {
     //   • focused group header rendered with accent (fg:153)
     //   • unfocused group header rendered with border_inactive (fg:240)
     insta::assert_snapshot!(render_to_styled_string(&mut state, 28, 30), @"
-     ≡[fg:111] 2[fg:255]  ●[fg:245] 1[fg:255]  ◎[fg:245] 0[fg:245]  ◐[fg:245] 0[fg:245]  ○[fg:245] 1[fg:255]  ✕[fg:245]
-    ⓘ[fg:221]                        —[fg:252] ▾[fg:252]
-    f[fg:153]o[fg:153]c[fg:153]u[fg:153]s[fg:153]e[fg:153]d[fg:153]-[fg:153]r[fg:153]e[fg:153]p[fg:153]o[fg:153]
-    ┃[fg:153,bg:239] [bg:239]●[fg:82,bg:239] [fg:174,bg:239]c[fg:174,bg:239]l[fg:174,bg:239]a[fg:174,bg:239]u[fg:174,bg:239]d[fg:174,bg:239]e[fg:174,bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239] [bg:239]
+     ≡[fg:12] 2[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 1[fg:15]  ✕[fg:8]
+    ⓘ[fg:11]                        —[fg:7] ▾[fg:7]
+    f[fg:14]o[fg:14]c[fg:14]u[fg:14]s[fg:14]e[fg:14]d[fg:14]-[fg:14]r[fg:14]e[fg:14]p[fg:14]o[fg:14]
+    ┃[fg:14,bg:8] [bg:8]●[fg:82,bg:8] [fg:13,bg:8]c[fg:13,bg:8]l[fg:13,bg:8]a[fg:13,bg:8]u[fg:13,bg:8]d[fg:13,bg:8]e[fg:13,bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8] [bg:8]
 
-    u[fg:255]n[fg:255]f[fg:255]o[fg:255]c[fg:255]u[fg:255]s[fg:255]e[fg:255]d[fg:255]-[fg:255]r[fg:255]e[fg:255]p[fg:255]o[fg:255]
-      ○[fg:110] [fg:141]c[fg:141]o[fg:141]d[fg:141]e[fg:141]x[fg:141]
-       [fg:244] [fg:244]W[fg:244]a[fg:244]i[fg:244]t[fg:244]i[fg:244]n[fg:244]g[fg:244] [fg:244]f[fg:244]o[fg:244]r[fg:244] [fg:244]p[fg:244]r[fg:244]o[fg:244]m[fg:244]p[fg:244]t[fg:244]…[fg:244]
+    u[fg:15]n[fg:15]f[fg:15]o[fg:15]c[fg:15]u[fg:15]s[fg:15]e[fg:15]d[fg:15]-[fg:15]r[fg:15]e[fg:15]p[fg:15]o[fg:15]
+      ○[fg:14] [fg:5]c[fg:5]o[fg:5]d[fg:5]e[fg:5]x[fg:5]
+       [fg:8] [fg:8]W[fg:8]a[fg:8]i[fg:8]t[fg:8]i[fg:8]n[fg:8]g[fg:8] [fg:8]f[fg:8]o[fg:8]r[fg:8] [fg:8]p[fg:8]r[fg:8]o[fg:8]m[fg:8]p[fg:8]t[fg:8]…[fg:8]
 
 
-    ╭[fg:240] [fg:240]A[fg:153]c[fg:153]t[fg:153]i[fg:153]v[fg:153]i[fg:153]t[fg:153]y[fg:153] [fg:240]│[fg:240] [fg:240]G[fg:252]i[fg:252]t[fg:252] [fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]╮[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]N[fg:252]o[fg:252] [fg:252]a[fg:252]c[fg:252]t[fg:252]i[fg:252]v[fg:252]i[fg:252]t[fg:252]y[fg:252] [fg:252]y[fg:252]e[fg:252]t[fg:252] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    ╰[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]╯[fg:240]
+    ╭[fg:8] [fg:8]A[fg:14]c[fg:14]t[fg:14]i[fg:14]v[fg:14]i[fg:14]t[fg:14]y[fg:14] [fg:8]│[fg:8] [fg:8]G[fg:7]i[fg:7]t[fg:7] [fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]╮[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]N[fg:7]o[fg:7] [fg:7]a[fg:7]c[fg:7]t[fg:7]i[fg:7]v[fg:7]i[fg:7]t[fg:7]y[fg:7] [fg:7]y[fg:7]e[fg:7]t[fg:7] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    ╰[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]╯[fg:8]
     ");
 }
 
@@ -1003,10 +1010,10 @@ fn test_running_status_color_in_output() {
     // Styled snapshot locks in the running spinner using SPINNER_PULSE[0]
     // color (fg:82).
     insta::assert_snapshot!(render_to_styled_string(&mut state, 28, 25), @"
-     ≡[fg:111] 1[fg:255]  ●[fg:245] 1[fg:255]  ◎[fg:245] 0[fg:245]  ◐[fg:245] 0[fg:245]  ○[fg:245] 0[fg:245]  ✕[fg:245]
-    ⓘ[fg:221]                        —[fg:252] ▾[fg:252]
-    p[fg:153]r[fg:153]o[fg:153]j[fg:153]e[fg:153]c[fg:153]t[fg:153]
-    ┃[fg:153] ●[fg:82] [fg:174]c[fg:174]l[fg:174]a[fg:174]u[fg:174]d[fg:174]e[fg:174]
+     ≡[fg:12] 1[fg:15]  ●[fg:8] 1[fg:15]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 0[fg:8]  ✕[fg:8]
+    ⓘ[fg:11]                        —[fg:7] ▾[fg:7]
+    p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]
+    ┃[fg:14] ●[fg:82] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
     ");
 }
 
@@ -1031,10 +1038,10 @@ fn test_waiting_status_color_in_output() {
     // Styled snapshot locks in the waiting status using status_waiting
     // color (fg:221).
     insta::assert_snapshot!(render_to_styled_string(&mut state, 28, 25), @"
-     ≡[fg:111] 1[fg:255]  ●[fg:245] 0[fg:245]  ◎[fg:245] 0[fg:245]  ◐[fg:245] 1[fg:255]  ○[fg:245] 0[fg:245]  ✕[fg:245]
-    ⓘ[fg:221]                        —[fg:252] ▾[fg:252]
-    p[fg:153]r[fg:153]o[fg:153]j[fg:153]e[fg:153]c[fg:153]t[fg:153]
-    ┃[fg:153] ◐[fg:221] [fg:174]c[fg:174]l[fg:174]a[fg:174]u[fg:174]d[fg:174]e[fg:174]
+     ≡[fg:12] 1[fg:15]  ●[fg:8] 0[fg:8]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 1[fg:15]  ○[fg:8] 0[fg:8]  ✕[fg:8]
+    ⓘ[fg:11]                        —[fg:7] ▾[fg:7]
+    p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]
+    ┃[fg:14] ◐[fg:11] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
     ");
 }
 
@@ -1059,10 +1066,10 @@ fn test_error_status_color_in_output() {
     // Styled snapshot locks in the error status using status_error
     // color (fg:167).
     insta::assert_snapshot!(render_to_styled_string(&mut state, 28, 25), @"
-     ≡[fg:111] 1[fg:255]  ●[fg:245] 0[fg:245]  ◎[fg:245] 0[fg:245]  ◐[fg:245] 0[fg:245]  ○[fg:245] 0[fg:245]  ✕[fg:245]
-    ⓘ[fg:221]                        —[fg:252] ▾[fg:252]
-    p[fg:153]r[fg:153]o[fg:153]j[fg:153]e[fg:153]c[fg:153]t[fg:153]
-    ┃[fg:153] ✕[fg:167] [fg:174]c[fg:174]l[fg:174]a[fg:174]u[fg:174]d[fg:174]e[fg:174]
+     ≡[fg:12] 1[fg:15]  ●[fg:8] 0[fg:8]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 0[fg:8]  ✕[fg:8]
+    ⓘ[fg:11]                        —[fg:7] ▾[fg:7]
+    p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]
+    ┃[fg:14] ✕[fg:9] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
     ");
 }
 
@@ -1086,31 +1093,31 @@ fn test_idle_status_color_in_output() {
     // Styled snapshot locks in the idle status using status_idle
     // color (fg:110).
     insta::assert_snapshot!(render_to_styled_string(&mut state, 28, 25), @"
-     ≡[fg:111] 1[fg:255]  ●[fg:245] 0[fg:245]  ◎[fg:245] 0[fg:245]  ◐[fg:245] 0[fg:245]  ○[fg:245] 1[fg:255]  ✕[fg:245]
-    ⓘ[fg:221]                        —[fg:252] ▾[fg:252]
-    p[fg:153]r[fg:153]o[fg:153]j[fg:153]e[fg:153]c[fg:153]t[fg:153]
-    ┃[fg:153] ○[fg:110] [fg:174]c[fg:174]l[fg:174]a[fg:174]u[fg:174]d[fg:174]e[fg:174]
+     ≡[fg:12] 1[fg:15]  ●[fg:8] 0[fg:8]  ◎[fg:8] 0[fg:8]  ◐[fg:8] 0[fg:8]  ○[fg:8] 1[fg:15]  ✕[fg:8]
+    ⓘ[fg:11]                        —[fg:7] ▾[fg:7]
+    p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]
+    ┃[fg:14] ○[fg:14] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
 
-    ╭[fg:240] [fg:240]A[fg:153]c[fg:153]t[fg:153]i[fg:153]v[fg:153]i[fg:153]t[fg:153]y[fg:153] [fg:240]│[fg:240] [fg:240]G[fg:252]i[fg:252]t[fg:252] [fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]╮[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]N[fg:252]o[fg:252] [fg:252]a[fg:252]c[fg:252]t[fg:252]i[fg:252]v[fg:252]i[fg:252]t[fg:252]y[fg:252] [fg:252]y[fg:252]e[fg:252]t[fg:252] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    │[fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240] [fg:240]│[fg:240]
-    ╰[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]─[fg:240]╯[fg:240]
+    ╭[fg:8] [fg:8]A[fg:14]c[fg:14]t[fg:14]i[fg:14]v[fg:14]i[fg:14]t[fg:14]y[fg:14] [fg:8]│[fg:8] [fg:8]G[fg:7]i[fg:7]t[fg:7] [fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]╮[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]N[fg:7]o[fg:7] [fg:7]a[fg:7]c[fg:7]t[fg:7]i[fg:7]v[fg:7]i[fg:7]t[fg:7]y[fg:7] [fg:7]y[fg:7]e[fg:7]t[fg:7] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
+    ╰[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]╯[fg:8]
     ");
 }
 
@@ -1119,6 +1126,6 @@ fn test_unknown_status_color_in_output() {
     let theme = tmux_agent_sidebar::ui::colors::ColorTheme::default();
     assert_eq!(
         theme.status_color(&PaneStatus::Unknown, false),
-        ratatui::style::Color::Indexed(244)
+        ratatui::style::Color::Indexed(8)
     );
 }

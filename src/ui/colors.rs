@@ -47,47 +47,49 @@ pub struct ColorTheme {
     pub section_title: Color,
     pub activity_timestamp: Color,
     pub response_arrow: Color,
+    pub running_spinner: Option<Color>,
 }
 
 impl Default for ColorTheme {
     fn default() -> Self {
         Self {
-            accent: Color::Indexed(153),
-            border_inactive: Color::Indexed(240),
-            status_all: Color::Indexed(111),
-            status_running: Color::Indexed(114),
-            status_waiting: Color::Indexed(221),
-            status_idle: Color::Indexed(110),
-            status_error: Color::Indexed(167),
-            status_unknown: Color::Indexed(244),
-            filter_inactive: Color::Indexed(245),
-            agent_claude: Color::Indexed(174),
-            agent_codex: Color::Indexed(141),
-            agent_opencode: Color::Indexed(117),
-            agent_antigravity: Color::Indexed(81),
-            pet_body: Color::Indexed(208),
-            pet_eye: Color::Indexed(114),
-            text_active: Color::Indexed(255),
-            text_muted: Color::Indexed(252),
-            text_inactive: Color::Indexed(244),
-            session_header: Color::Indexed(39),
-            port: Color::Indexed(246),
-            wait_reason: Color::Indexed(221),
-            selection_bg: Color::Indexed(239),
-            branch: Color::Indexed(109),
-            badge_danger: Color::Indexed(167),
-            badge_auto: Color::Indexed(221),
-            badge_plan: Color::Indexed(117),
-            task_progress: Color::Indexed(223),
-            subagent: Color::Indexed(73),
-            commit_hash: Color::Indexed(221),
-            diff_added: Color::Indexed(114),
-            diff_deleted: Color::Indexed(174),
-            file_change: Color::Indexed(221),
-            pr_link: Color::Indexed(117),
-            section_title: Color::Indexed(109),
-            activity_timestamp: Color::Indexed(109),
-            response_arrow: Color::Indexed(81),
+            accent: Color::Indexed(14),            // bright cyan
+            border_inactive: Color::Indexed(8),    // bright black (dark gray)
+            status_all: Color::Indexed(12),        // bright blue
+            status_running: Color::Indexed(10),    // bright green
+            status_waiting: Color::Indexed(11),    // bright yellow
+            status_idle: Color::Indexed(14),       // bright cyan
+            status_error: Color::Indexed(9),       // bright red
+            status_unknown: Color::Indexed(8),     // bright black (dark gray)
+            filter_inactive: Color::Indexed(8),    // bright black
+            agent_claude: Color::Indexed(13),      // bright magenta
+            agent_codex: Color::Indexed(5),        // magenta
+            agent_opencode: Color::Indexed(6),     // cyan
+            agent_antigravity: Color::Indexed(12), // bright blue
+            pet_body: Color::Indexed(11),          // bright yellow
+            pet_eye: Color::Indexed(10),           // bright green
+            text_active: Color::Indexed(15),       // bright white
+            text_muted: Color::Indexed(7),         // light gray
+            text_inactive: Color::Indexed(8),      // bright black
+            session_header: Color::Indexed(12),    // bright blue
+            port: Color::Indexed(8),               // bright black
+            wait_reason: Color::Indexed(11),       // bright yellow
+            selection_bg: Color::Indexed(8),       // bright black
+            branch: Color::Indexed(6),             // cyan
+            badge_danger: Color::Indexed(9),       // bright red
+            badge_auto: Color::Indexed(11),        // bright yellow
+            badge_plan: Color::Indexed(14),        // bright cyan
+            task_progress: Color::Indexed(11),     // bright yellow
+            subagent: Color::Indexed(6),           // cyan
+            commit_hash: Color::Indexed(11),       // bright yellow
+            diff_added: Color::Indexed(10),        // bright green
+            diff_deleted: Color::Indexed(9),       // bright red
+            file_change: Color::Indexed(11),       // bright yellow
+            pr_link: Color::Indexed(14),           // bright cyan
+            section_title: Color::Indexed(14),     // bright cyan
+            activity_timestamp: Color::Indexed(8), // bright black
+            response_arrow: Color::Indexed(14),    // bright cyan
+            running_spinner: None,
         }
     }
 }
@@ -148,6 +150,9 @@ impl ColorTheme {
             theme.activity_timestamp,
         );
         theme.response_arrow = read(tmux::SIDEBAR_COLOR_RESPONSE_ARROW, theme.response_arrow);
+        theme.running_spinner = all_opts
+            .get(tmux::SIDEBAR_COLOR_RUNNING_SPINNER)
+            .and_then(|s| parse_tmux_color(s));
 
         theme
     }
@@ -224,41 +229,41 @@ mod tests {
         let theme = ColorTheme::default();
         assert_eq!(
             theme.status_color(&PaneStatus::Running, false),
-            Color::Indexed(114)
+            Color::Indexed(10)
         );
         assert_eq!(
             theme.status_color(&PaneStatus::Waiting, false),
-            Color::Indexed(221)
+            Color::Indexed(11)
         );
         assert_eq!(
             theme.status_color(&PaneStatus::Idle, false),
-            Color::Indexed(110)
+            Color::Indexed(14)
         );
         assert_eq!(
             theme.status_color(&PaneStatus::Error, false),
-            Color::Indexed(167)
+            Color::Indexed(9)
         );
         assert_eq!(
             theme.status_color(&PaneStatus::Unknown, false),
-            Color::Indexed(244)
+            Color::Indexed(8)
         );
     }
 
     #[test]
     fn agent_color_all() {
         let theme = ColorTheme::default();
-        assert_eq!(theme.agent_claude, Color::Indexed(174));
-        assert_eq!(theme.agent_codex, Color::Indexed(141));
-        assert_eq!(theme.agent_opencode, Color::Indexed(117));
-        assert_eq!(theme.agent_antigravity, Color::Indexed(81));
+        assert_eq!(theme.agent_claude, Color::Indexed(13));
+        assert_eq!(theme.agent_codex, Color::Indexed(5));
+        assert_eq!(theme.agent_opencode, Color::Indexed(6));
+        assert_eq!(theme.agent_antigravity, Color::Indexed(12));
         assert_eq!(theme.agent_color(&AgentType::Unknown), theme.status_unknown);
     }
 
     #[test]
     fn pet_color_defaults_match_current_palette() {
         let theme = ColorTheme::default();
-        assert_eq!(theme.pet_body, Color::Indexed(208));
-        assert_eq!(theme.pet_eye, Color::Indexed(114));
+        assert_eq!(theme.pet_body, Color::Indexed(11));
+        assert_eq!(theme.pet_eye, Color::Indexed(10));
     }
 
     #[test]
@@ -273,12 +278,17 @@ mod tests {
             "d0e7ff".to_string(),
         );
         options.insert(tmux::SIDEBAR_COLOR_BORDER.to_string(), "42".to_string());
+        options.insert(
+            tmux::SIDEBAR_COLOR_RUNNING_SPINNER.to_string(),
+            "#00ff00".to_string(),
+        );
 
         let theme = ColorTheme::from_options(&options);
 
         assert_eq!(theme.accent, Color::Rgb(0x1a, 0x2b, 0x3c));
         assert_eq!(theme.agent_codex, Color::Rgb(0xd0, 0xe7, 0xff));
         assert_eq!(theme.border_inactive, Color::Indexed(42));
+        assert_eq!(theme.running_spinner, Some(Color::Rgb(0x00, 0xff, 0x00)));
     }
 
     #[test]
