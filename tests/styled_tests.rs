@@ -68,7 +68,7 @@ fn snapshot_activity_focused_styled() {
 
     ╭[fg:14] [fg:14]A[fg:14]c[fg:14]t[fg:14]i[fg:14]v[fg:14]i[fg:14]t[fg:14]y[fg:14] [fg:8]│[fg:8] [fg:8]G[fg:7]i[fg:7]t[fg:7] [fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]─[fg:14]╮[fg:14]
     │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
-    │[fg:14]1[fg:15]0[fg:15]:[fg:15]3[fg:15]2[fg:15] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]E[fg:11]d[fg:11]i[fg:11]t[fg:11]│[fg:14]
+    │[fg:14]1[fg:14]0[fg:14]:[fg:14]3[fg:14]2[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]E[fg:11]d[fg:11]i[fg:11]t[fg:11]│[fg:14]
     │[fg:14] [fg:7] [fg:7]s[fg:7]r[fg:7]c[fg:7]/[fg:7]m[fg:7]a[fg:7]i[fg:7]n[fg:7].[fg:7]r[fg:7]s[fg:7] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
     │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
     │[fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14] [fg:14]│[fg:14]
@@ -111,7 +111,7 @@ fn snapshot_activity_unfocused_styled() {
 
     ╭[fg:8] [fg:8]A[fg:14]c[fg:14]t[fg:14]i[fg:14]v[fg:14]i[fg:14]t[fg:14]y[fg:14] [fg:8]│[fg:8] [fg:8]G[fg:7]i[fg:7]t[fg:7] [fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]─[fg:8]╮[fg:8]
     │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
-    │[fg:8]1[fg:15]0[fg:15]:[fg:15]3[fg:15]2[fg:15] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]E[fg:11]d[fg:11]i[fg:11]t[fg:11]│[fg:8]
+    │[fg:8]1[fg:14]0[fg:14]:[fg:14]3[fg:14]2[fg:14] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]E[fg:11]d[fg:11]i[fg:11]t[fg:11]│[fg:8]
     │[fg:8] [fg:7] [fg:7]s[fg:7]r[fg:7]c[fg:7]/[fg:7]m[fg:7]a[fg:7]i[fg:7]n[fg:7].[fg:7]r[fg:7]s[fg:7] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
     │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]
     │[fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8] [fg:8]│[fg:8]

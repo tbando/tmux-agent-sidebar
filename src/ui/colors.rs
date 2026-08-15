@@ -87,7 +87,7 @@ impl Default for ColorTheme {
             file_change: Color::Indexed(11),        // bright yellow
             pr_link: Color::Indexed(14),            // bright cyan
             section_title: Color::Indexed(14),      // bright cyan
-            activity_timestamp: Color::Indexed(15), // bright gray / bright white
+            activity_timestamp: Color::Indexed(14), // bright cyan (matches repo name / accent)
             response_arrow: Color::Indexed(14),     // bright cyan
             running_spinner: None,
         }
