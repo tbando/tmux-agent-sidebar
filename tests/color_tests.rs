@@ -44,7 +44,7 @@ fn test_all_color_theme_defaults() {
     assert_eq!(theme.session_header, Color::Indexed(12));
     assert_eq!(theme.port, Color::Indexed(8));
     assert_eq!(theme.wait_reason, Color::Indexed(11));
-    assert_eq!(theme.branch, Color::Indexed(6));
+    assert_eq!(theme.branch, Color::Indexed(5));
 
     // New theme fields
     assert_eq!(theme.badge_danger, Color::Indexed(9));
@@ -861,7 +861,7 @@ fn test_branch_color_in_agent_panel() {
     ⓘ[fg:11]                                    —[fg:7] ▾[fg:7]
     p[fg:14]r[fg:14]o[fg:14]j[fg:14]e[fg:14]c[fg:14]t[fg:14]                                +[fg:14]
     ┃[fg:14] ●[fg:10] [fg:13]c[fg:13]l[fg:13]a[fg:13]u[fg:13]d[fg:13]e[fg:13]
-    ┃[fg:14]  [fg:6] [fg:6]f[fg:6]e[fg:6]a[fg:6]t[fg:6]u[fg:6]r[fg:6]e[fg:6]/[fg:6]c[fg:6]o[fg:6]o[fg:6]l[fg:6]-[fg:6]f[fg:6]e[fg:6]a[fg:6]t[fg:6]u[fg:6]r[fg:6]e[fg:6]
+    ┃[fg:14]  [fg:5] [fg:5]f[fg:5]e[fg:5]a[fg:5]t[fg:5]u[fg:5]r[fg:5]e[fg:5]/[fg:5]c[fg:5]o[fg:5]o[fg:5]l[fg:5]-[fg:5]f[fg:5]e[fg:5]a[fg:5]t[fg:5]u[fg:5]r[fg:5]e[fg:5]
     ");
 }
 
