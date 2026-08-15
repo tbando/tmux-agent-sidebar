@@ -5,7 +5,14 @@ set -euo pipefail
 PLUGIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_DIR="$PLUGIN_DIR/bin"
 BINARY="$BIN_DIR/tmux-agent-sidebar"
-REPO="hiroppy/tmux-agent-sidebar"
+REPO="tbando/tmux-agent-sidebar"
+if git -C "$PLUGIN_DIR" config --get remote.origin.url &>/dev/null; then
+    origin_url="$(git -C "$PLUGIN_DIR" config --get remote.origin.url)"
+    detected_repo="$(echo "$origin_url" | sed -E 's#(https://github.com/|git@github.com:)([^/]+/[^/.]+)(\.git)?#\2#')"
+    if [[ -n "$detected_repo" ]]; then
+        REPO="$detected_repo"
+    fi
+fi
 action="${1:-}"
 
 function finish {
@@ -16,8 +23,12 @@ function finish {
         exit $exit_code
     fi
     if [[ $exit_code -eq 0 ]]; then
-        echo "Reloading tmux.conf"
-        tmux source ~/.tmux.conf
+        echo "Reloading tmux config"
+        if [[ -f "$HOME/.tmux.conf" ]]; then
+            tmux source "$HOME/.tmux.conf" 2>/dev/null || true
+        elif [[ -f "${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf" ]]; then
+            tmux source "${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf" 2>/dev/null || true
+        fi
         exit 0
     else
         echo "Something went wrong. Press any key to close this window."
