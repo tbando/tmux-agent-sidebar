@@ -361,6 +361,84 @@ fn snapshot_two_agents_same_window_ui() {
 }
 
 #[test]
+fn snapshot_claude_and_antigravity_parity_ui() {
+    let pane_claude = PaneInfo {
+        pane_id: "%1".into(),
+        pane_active: true,
+        status: PaneStatus::Running,
+        attention: false,
+        agent: AgentType::Claude,
+        path: "/home/user/project".into(),
+        current_command: "claude".into(),
+        prompt: "implement feature".into(),
+        prompt_is_response: false,
+        started_at: None,
+        wait_reason: String::new(),
+        permission_mode: tmux_agent_sidebar::tmux::PermissionMode::Default,
+        subagents: vec![],
+        pane_pid: None,
+        worktree: WorktreeMetadata::default(),
+        session_id: None,
+        session_name: String::new(),
+        sidebar_spawned: false,
+        bg_shell_cmd: None,
+        model: Some("claude-3-7-sonnet".into()),
+        effort: None,
+    };
+    let pane_agy = PaneInfo {
+        pane_id: "%2".into(),
+        pane_active: false,
+        status: PaneStatus::Running,
+        attention: false,
+        agent: AgentType::Antigravity,
+        path: "/home/user/project".into(),
+        current_command: "agy".into(),
+        prompt: "review changes".into(),
+        prompt_is_response: false,
+        started_at: None,
+        wait_reason: String::new(),
+        permission_mode: tmux_agent_sidebar::tmux::PermissionMode::Default,
+        subagents: vec![],
+        pane_pid: None,
+        worktree: WorktreeMetadata::default(),
+        session_id: None,
+        session_name: String::new(),
+        sidebar_spawned: false,
+        bg_shell_cmd: None,
+        model: Some("gemini-3.7-flash".into()),
+        effort: None,
+    };
+
+    let mut state = make_state(vec![SessionInfo {
+        session_name: "main".into(),
+        windows: vec![WindowInfo {
+            window_id: "@1".into(),
+            window_name: "project".into(),
+            window_active: true,
+            auto_rename: false,
+            panes: vec![pane_claude.clone(), pane_agy.clone()],
+        }],
+    }]);
+    state.repo_groups = vec![make_repo_group("project", vec![pane_claude, pane_agy])];
+    state.bottom_panel_height = 3;
+    state.rebuild_row_targets();
+
+    let output = render_to_string(&mut state, 40, 20);
+    insta::assert_snapshot!(output, @"
+     ≡ 2  ● 2  ◎ 0  ◐ 0  ○ 0  ✕ 0
+    ⓘ                                    — ▾
+    project
+    ┃ ● claude/claude-3-7-sonnet
+        implement feature
+      ● antigravity/gemini-3.7-flash
+        review changes
+    ╭ Activity │ Git ──────────────────────╮
+    │            No activity yet           │
+    ╰──────────────────────────────────────╯
+    ");
+}
+
+#[test]
 fn snapshot_two_windows_ui() {
     let pane1 = make_pane(AgentType::Claude, PaneStatus::Running);
     let mut pane2 = make_pane(AgentType::Codex, PaneStatus::Idle);

@@ -11,8 +11,8 @@ use super::options::{
     PANE_WAIT_REASON, PANE_WORKTREE_BRANCH, PANE_WORKTREE_NAME, unset_pane_option,
 };
 use super::types::{
-    AgentType, CODEX_AGENT, PaneInfo, PaneStatus, PermissionMode, SessionInfo, WindowInfo,
-    WorktreeMetadata,
+    AgentType, CLAUDE_AGENT, CODEX_AGENT, PaneInfo, PaneStatus, PermissionMode, SessionInfo,
+    WindowInfo, WorktreeMetadata,
 };
 use crate::worktree::SPAWNED_OPTION;
 
@@ -188,8 +188,10 @@ fn build_session_hierarchy(
             });
 
         if let Some(pane) = parse_pane_fields_with_processes(pane_fields, process_snapshot) {
-            if matches!(pane.agent, AgentType::Codex | AgentType::Antigravity)
-                && let Some(pid) = pane.pane_pid
+            if matches!(
+                pane.agent,
+                AgentType::Claude | AgentType::Codex | AgentType::Antigravity
+            ) && let Some(pid) = pane.pane_pid
             {
                 codex_pids.push((window_id.to_string(), window.panes.len(), pid));
             }
@@ -304,10 +306,21 @@ fn parse_pane_fields_with_processes(
 
     // Claude / Antigravity: read permission_mode from hook-set tmux variable.
     // Codex / OpenCode: no permission_mode in hooks, keep the default (resolved via process scan).
-    let permission_mode = if matches!(agent, AgentType::Claude | AgentType::Antigravity) {
-        PermissionMode::from_label(&parts[pane_line_field::PERMISSION_MODE])
-    } else {
-        PermissionMode::Default
+    let permission_mode = match agent {
+        AgentType::Claude => match parts[pane_line_field::PERMISSION_MODE].as_str() {
+            "plan" => PermissionMode::Plan,
+            "acceptEdits" | "accept-edits" => PermissionMode::AcceptEdits,
+            "bypassPermissions" | "dangerously-skip-permissions" => {
+                PermissionMode::BypassPermissions
+            }
+            "dontAsk" | "dont-ask" => PermissionMode::DontAsk,
+            "defer" => PermissionMode::Defer,
+            _ => PermissionMode::Default,
+        },
+        AgentType::Antigravity => {
+            PermissionMode::from_label(&parts[pane_line_field::PERMISSION_MODE])
+        }
+        _ => PermissionMode::Default,
     };
 
     let prompt_source = &parts[pane_line_field::PROMPT_SOURCE];
@@ -467,6 +480,34 @@ fn detect_antigravity_permission_mode(args: &str) -> PermissionMode {
     PermissionMode::Default
 }
 
+/// Detect Claude permission mode from process args (--dangerously-skip-permissions, --permission-mode plan, etc.)
+fn detect_claude_permission_mode(args: &str) -> PermissionMode {
+    if args.contains("--dangerously-skip-permissions")
+        || args.contains("--permission-mode bypassPermissions")
+        || args.contains("--permission-mode=bypassPermissions")
+    {
+        return PermissionMode::BypassPermissions;
+    }
+    if args.contains("--permission-mode plan") || args.contains("--permission-mode=plan") {
+        return PermissionMode::Plan;
+    }
+    if args.contains("--permission-mode accept-edits")
+        || args.contains("--permission-mode=accept-edits")
+        || args.contains("--permission-mode acceptEdits")
+        || args.contains("--permission-mode=acceptEdits")
+    {
+        return PermissionMode::AcceptEdits;
+    }
+    if args.contains("--permission-mode dontAsk")
+        || args.contains("--permission-mode=dontAsk")
+        || args.contains("--permission-mode dont-ask")
+        || args.contains("--permission-mode=dont-ask")
+    {
+        return PermissionMode::DontAsk;
+    }
+    PermissionMode::Default
+}
+
 fn process_snapshot_for_panes(all_panes_output: &str) -> Option<ProcessSnapshot> {
     if !pane_output_needs_process_snapshot(all_panes_output) {
         return None;
@@ -484,7 +525,7 @@ fn pane_output_needs_process_snapshot(all_panes_output: &str) -> bool {
         AgentType::from_label(&pane_fields[pane_line_field::AGENT]).is_some_and(|agent| {
             matches!(
                 agent,
-                AgentType::Codex | AgentType::OpenCode | AgentType::Antigravity
+                AgentType::Claude | AgentType::Codex | AgentType::OpenCode | AgentType::Antigravity
             )
         })
     })
@@ -505,7 +546,10 @@ fn detect_process_model_and_effort(
             || (*token == "-m"
                 && matches!(
                     agent,
-                    AgentType::Codex | AgentType::OpenCode | AgentType::Antigravity
+                    AgentType::Claude
+                        | AgentType::Codex
+                        | AgentType::OpenCode
+                        | AgentType::Antigravity
                 )))
             && i + 1 < tokens.len()
             && !tokens[i + 1].starts_with('-')
@@ -560,7 +604,15 @@ fn apply_codex_permission_modes(
                         pane.effort = e;
                     }
                 }
-                if pane.agent == AgentType::Codex && comm == CODEX_AGENT {
+                if pane.agent == AgentType::Claude
+                    && comm == CLAUDE_AGENT
+                    && pane.permission_mode == PermissionMode::Default
+                {
+                    pane.permission_mode = detect_claude_permission_mode(&info.args);
+                    if pane.permission_mode != PermissionMode::Default {
+                        break;
+                    }
+                } else if pane.agent == AgentType::Codex && comm == CODEX_AGENT {
                     pane.permission_mode = detect_codex_permission_mode(&info.args);
                     if pane.permission_mode != PermissionMode::Default {
                         break;
@@ -777,6 +829,46 @@ mod tests {
     }
 
     #[test]
+    fn apply_claude_permission_modes_and_model_from_ps() {
+        let mut panes = vec![PaneInfo {
+            pane_id: "%1".to_string(),
+            pane_active: true,
+            status: PaneStatus::Running,
+            attention: false,
+            agent: AgentType::Claude,
+            path: "/tmp".to_string(),
+            current_command: "bash".to_string(),
+            prompt: String::new(),
+            prompt_is_response: false,
+            started_at: None,
+            wait_reason: String::new(),
+            permission_mode: PermissionMode::Default,
+            subagents: Vec::new(),
+            pane_pid: Some(101),
+            worktree: WorktreeMetadata::default(),
+            session_id: None,
+            session_name: String::new(),
+            sidebar_spawned: false,
+            bg_shell_cmd: None,
+            model: None,
+            effort: None,
+        }];
+        let pids = vec![(0, 101)];
+
+        let ps_out = "101 1 bash /bin/bash\n102 101 claude /usr/local/bin/claude --permission-mode plan --model=claude-3-7-sonnet\n";
+        let snapshot = ProcessSnapshot::from_ps_output(ps_out);
+        apply_codex_permission_modes(&mut panes, &pids, &snapshot);
+        assert_eq!(panes[0].permission_mode, PermissionMode::Plan);
+        assert_eq!(panes[0].model.as_deref(), Some("claude-3-7-sonnet"));
+
+        panes[0].permission_mode = PermissionMode::Default;
+        let ps_out = "101 1 bash /bin/bash\n102 101 claude /usr/local/bin/claude --dangerously-skip-permissions\n";
+        let snapshot = ProcessSnapshot::from_ps_output(ps_out);
+        apply_codex_permission_modes(&mut panes, &pids, &snapshot);
+        assert_eq!(panes[0].permission_mode, PermissionMode::BypassPermissions);
+    }
+
+    #[test]
     fn parse_ps_processes_preserves_spaced_args() {
         let snapshot = ProcessSnapshot::from_ps_output(
             "100 1 codex /Applications/Codex App/bin/codex --full-auto\n101 100 sh sh -c wrapper\n",
@@ -959,7 +1051,7 @@ mod tests {
         assert_eq!(pane.started_at, Some(1700000000));
         assert_eq!(pane.pane_pid, Some(12345));
         assert_eq!(pane.subagents, vec!["Explore", "Plan"]);
-        assert_eq!(pane.permission_mode, PermissionMode::Auto);
+        assert_eq!(pane.permission_mode, PermissionMode::Default);
     }
 
     #[test]

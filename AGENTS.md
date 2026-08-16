@@ -103,3 +103,11 @@ This project uses Rust edition 2024 (`Cargo.toml`).
 ## Antigravity (agy)
 
 Antigravity hooks are defined via its native hooks configuration. When the user requests setup instructions (`tmux-agent-sidebar setup antigravity`), the binary reads the internal `HOOK_REGISTRATIONS` array in `adapter/antigravity.rs` to map Antigravity's lifecycle hooks (`PreInvocation`, `PreToolUse`, `Stop`, etc.) into `tmux-agent-sidebar hook antigravity <event> <payload>` shell commands, wrapping it in the JSON structure expected by `~/.gemini/config/hooks.json`.
+
+## Agent Display Parity (Claude & Antigravity)
+
+Claude and Antigravity must maintain identical display formats across the UI:
+- **Default mode**: Unbadged (`PermissionMode::Default`, badge `""`). Claude's `"auto"` / `"default"` hook events and Antigravity's default modes both map to `PermissionMode::Default`.
+- **Explicit permission modes**: `plan` (`plan`), `acceptEdits` (`edit`), `bypassPermissions` (`!`), `dontAsk` (`dontAsk`).
+- **Model name & effort**: Follows `{agent}/{model}/{effort}` formatting (e.g. `claude/claude-3-7-sonnet`, `agy/gemini-3.7-flash/med`). Model names are automatically extracted from hook payloads, transcripts, process arguments, or settings files.
+

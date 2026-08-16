@@ -840,3 +840,43 @@ fn activity_log_with_tool_response() {
         }
     );
 }
+
+#[test]
+fn extract_model_from_transcript_file() {
+    let adapter = ClaudeAdapter;
+    let dir = tempfile::tempdir().unwrap();
+    let transcript_file = dir.path().join("session.jsonl");
+    std::fs::write(
+        &transcript_file,
+        r#"{"type":"user","message":{"content":"hi"}}
+{"type":"assistant","message":{"model":"claude-3-7-sonnet-20250219","content":[]}}
+"#,
+    )
+    .unwrap();
+
+    let input = json!({
+        "cwd": "/tmp",
+        "transcript_path": transcript_file.to_str().unwrap(),
+        "prompt": "hello",
+    });
+    let event = adapter.parse("user-prompt-submit", &input).unwrap();
+    match event {
+        AgentEvent::UserPromptSubmit { model, .. } => {
+            assert_eq!(model.as_deref(), Some("claude-3-7-sonnet"));
+        }
+        _ => panic!("wrong variant"),
+    }
+}
+
+#[test]
+fn normalize_model_name_variants() {
+    assert_eq!(
+        normalize_model_name("claude-3-7-sonnet-20250219"),
+        "claude-3-7-sonnet"
+    );
+    assert_eq!(
+        normalize_model_name("anthropic/claude-3-5-sonnet-20241022"),
+        "claude-3-5-sonnet"
+    );
+    assert_eq!(normalize_model_name("claude-opus-4"), "claude-opus-4");
+}
